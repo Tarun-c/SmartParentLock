@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="200dp"
+    android:height="200dp"
+    android:viewportWidth="200"
+    android:viewportHeight="200">
+    
+    <!-- Timer/Clock Body -->
+    <path
+        android:fillColor="#E3F2FD"
+        android:pathData="M100,20 A80,80 0 1,1 100,180 A80,80 0 1,1 100,20 Z"/>
+    
+    <!-- Clock Rim -->
+    <path
+        android:fillColor="#1565C0"
+        android:pathData="M100,30 A70,70 0 1,0 100,170 A70,70 0 1,0 100,30 Z M100,180 A80,80 0 1,1 100,20 A80,80 0 1,1 100,180 Z"/>
+        
+    <!-- Stopwatch Button -->
+    <path
+        android:fillColor="#1565C0"
+        android:pathData="M90,10 H110 V25 H90 Z"/>
+        
+    <!-- Ticks -->
+    <path
+        android:fillColor="#1565C0"
+        android:pathData="M100,40 V50 M100,150 V160 M40,100 H50 M150,100 H160"
+        android:strokeWidth="4"
+        android:strokeColor="#1565C0"
+        android:strokeLineCap="round"/>
+    
+    <!-- Hands -->
+    <path
+        android:fillColor="#FFC107"
+        android:pathData="M100,100 L100,60"
+        android:strokeWidth="6"
+        android:strokeColor="#FFC107"
+        android:strokeLineCap="round"/>
+    
+    <path
+        android:fillColor="#FFC107"
+        android:pathData="M100,100 L130,100"
+        android:strokeWidth="6"
+        android:strokeColor="#FFC107"
+        android:strokeLineCap="round"/>
+    
+    <!-- Center Dot -->
+    <path
+        android:fillColor="#FF6F00"
+        android:pathData="M100,100m-8,0a8,8 0 1,1 16,0a8,8 0 1,1 -16,0"/>
+
+</vector>

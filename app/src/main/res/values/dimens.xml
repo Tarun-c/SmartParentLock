@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Base dimensions for normal phones (hdpi/xhdpi) -->
+    
+    <!-- Text Sizes -->
+    <dimen name="text_size_title">28sp</dimen>
+    <dimen name="text_size_subtitle">16sp</dimen>
+    <dimen name="text_size_body">14sp</dimen>
+    <dimen name="text_size_small">12sp</dimen>
+    <dimen name="text_size_button">16sp</dimen>
+    
+    <!-- Spacing -->
+    <dimen name="spacing_tiny">4dp</dimen>
+    <dimen name="spacing_small">8dp</dimen>
+    <dimen name="spacing_medium">16dp</dimen>
+    <dimen name="spacing_large">24dp</dimen>
+    <dimen name="spacing_xlarge">32dp</dimen>
+    
+    <!-- Card/Container -->
+    <dimen name="card_corner_radius">16dp</dimen>
+    <dimen name="card_elevation">2dp</dimen>
+    <dimen name="card_padding">20dp</dimen>
+    
+    <!-- Icons -->
+    <dimen name="icon_size_small">24dp</dimen>
+    <dimen name="icon_size_medium">32dp</dimen>
+    <dimen name="icon_size_large">40dp</dimen>
+    <dimen name="icon_size_xlarge">120dp</dimen>
+    
+    <!-- Onboarding -->
+    <dimen name="onboarding_image_padding">32dp</dimen>
+    <dimen name="onboarding_title_size">28sp</dimen>
+    <dimen name="onboarding_desc_size">16sp</dimen>
+    <dimen name="onboarding_card_padding">32dp</dimen>
+    
+    <!-- Lock Screen -->
+    <dimen name="lock_question_size">20sp</dimen>
+    <dimen name="lock_button_height">56dp</dimen>
+    <dimen name="lock_button_margin">8dp</dimen>
+</resources>

@@ -1,0 +1,538 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background_page">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/transparent"
+        app:elevation="0dp">
+
+        <com.google.android.material.appbar.CollapsingToolbarLayout
+            android:layout_width="match_parent"
+            android:layout_height="220dp"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed|snap"
+            app:contentScrim="@color/purple_700"
+            app:expandedTitleGravity="bottom|center_horizontal"
+            app:expandedTitleMarginBottom="20dp"
+            app:title="Smart Parent Lock">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:orientation="vertical"
+                app:layout_collapseMode="parallax"
+                app:layout_collapseParallaxMultiplier="0.7">
+                
+                <ImageView
+                    android:layout_width="120dp"
+                    android:layout_height="120dp"
+                    android:src="@mipmap/ic_launcher_round"
+                    android:layout_marginBottom="32dp"/>
+            </LinearLayout>
+
+            <androidx.appcompat.widget.Toolbar
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                app:layout_collapseMode="pin"/>
+        </com.google.android.material.appbar.CollapsingToolbarLayout>
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        android:padding="16dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <!-- MAIN SWITCH CARD -->
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="2dp"
+                app:strokeWidth="0dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="20dp"
+                    android:background="#FFFFFF">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical">
+                        
+                        <ImageView
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:src="@android:drawable/ic_lock_idle_lock"
+                            app:tint="@color/color_lock_status"/>
+                            
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Lock Status"
+                            android:textSize="18sp"
+                            android:textStyle="bold"
+                            android:layout_marginStart="16dp"/>
+
+                        <com.google.android.material.switchmaterial.SwitchMaterial
+                            android:id="@+id/switchLock"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:scaleX="1.2"
+                            android:scaleY="1.2"/>
+                    </LinearLayout>
+                    
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Enable to start protecting apps on screen off."
+                        android:textColor="#757575"
+                        android:textSize="14sp"
+                        android:layout_marginTop="8dp"/>
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- SECURITY CARD -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Security"
+                android:textStyle="bold"
+                android:textColor="#666666"
+                android:layout_marginBottom="8dp"
+                android:layout_marginStart="4dp"/>
+
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="24dp"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="2dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp"
+                    android:background="#FFFFFF">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:layout_marginBottom="16dp">
+                        
+                        <ImageView
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:src="@android:drawable/ic_secure"
+                            app:tint="@color/color_security"/>
+                            
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Prevent Uninstall"
+                            android:textSize="16sp"
+                            android:layout_marginStart="12dp"/>
+                            
+                        <com.google.android.material.switchmaterial.SwitchMaterial
+                            android:id="@+id/switchAdmin"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
+                    </LinearLayout>
+
+                    <Button
+                        android:id="@+id/btnSetPin"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Change Parent PIN"
+                        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                        android:textColor="@color/purple_700"
+                        app:strokeColor="@color/purple_500"/>
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- LEARNING PROFILE CARD -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Learning Profile"
+                android:textStyle="bold"
+                android:textColor="#666666"
+                android:layout_marginBottom="8dp"
+                android:layout_marginStart="4dp"/>
+
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="2dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp"
+                    android:background="#FFFFFF">
+
+                    <!-- LEARNING ENABLED SWITCH -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:layout_marginBottom="16dp">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Enable Learning Challenges"
+                            android:textSize="16sp"
+                            android:textStyle="bold"/>
+
+                        <com.google.android.material.switchmaterial.SwitchMaterial
+                            android:id="@+id/switchLearning"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
+                    </LinearLayout>
+
+                    <!-- AGE SLIDER -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:layout_marginBottom="12dp">
+                        
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Child Age"
+                            android:textStyle="bold"/>
+                            
+                         <View android:layout_width="0dp" android:layout_height="0dp" android:layout_weight="1"/>
+                         
+                         <TextView
+                            android:id="@+id/tvAgeValue"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="7 yrs"
+                            android:background="@drawable/bg_option_button"
+                            android:paddingHorizontal="12dp"
+                            android:paddingVertical="4dp"
+                            android:textColor="@color/color_learning"/>
+                    </LinearLayout>
+
+                    <com.google.android.material.slider.Slider
+                        android:id="@+id/sliderAge"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:valueFrom="3"
+                        android:valueTo="16"
+                        android:stepSize="1"
+                        android:value="7"/>
+                        
+                    <!-- CHALLENGE SLIDER -->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Challenge Type"
+                        android:textStyle="bold"
+                        android:layout_marginTop="16dp"
+                        android:layout_marginBottom="8dp"/>
+                        
+                    <HorizontalScrollView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:scrollbars="none">
+                        
+                        <com.google.android.material.chip.ChipGroup
+                            android:id="@+id/chipGroupInfo"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            app:singleSelection="false"
+                            app:selectionRequired="false"
+                            app:chipSpacingHorizontal="8dp">
+                            
+                            <com.google.android.material.chip.Chip
+                                android:id="@+id/chipMath"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="🧮 Math"
+                                style="@style/Widget.MaterialComponents.Chip.Choice"/>
+                                
+                            <com.google.android.material.chip.Chip
+                                android:id="@+id/chipVocabulary"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="📖 Vocab"
+                                style="@style/Widget.MaterialComponents.Chip.Choice"/>
+
+                            <com.google.android.material.chip.Chip
+                                android:id="@+id/chipPatterns"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="🧩 Patterns"
+                                style="@style/Widget.MaterialComponents.Chip.Choice"/>
+
+                            <com.google.android.material.chip.Chip
+                                android:id="@+id/chipGK"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="🌍 GK"
+                                style="@style/Widget.MaterialComponents.Chip.Choice"/>
+
+                            <com.google.android.material.chip.Chip
+                                android:id="@+id/chipTranslation"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="🗣️ Lang"
+                                style="@style/Widget.MaterialComponents.Chip.Choice"/>
+                        </com.google.android.material.chip.ChipGroup>
+                    </HorizontalScrollView>
+
+                    <!-- MATH SKILLS -->
+                     <LinearLayout
+                        android:id="@+id/layoutMathSkills"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:visibility="gone">
+                        
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Allowed Math Operations"
+                            android:textStyle="bold"
+                            android:layout_marginTop="16dp"
+                            android:layout_marginBottom="8dp"/>
+                        
+                        <com.google.android.material.chip.ChipGroup
+                            android:id="@+id/chipGroupMathSkills"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            app:singleSelection="false"
+                            app:chipSpacingHorizontal="8dp">
+
+                            <com.google.android.material.chip.Chip
+                                android:id="@+id/chipAdd"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="➕ Add"
+                                style="@style/Widget.MaterialComponents.Chip.Filter"/>
+
+                            <com.google.android.material.chip.Chip
+                                android:id="@+id/chipSub"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="➖ Sub"
+                                style="@style/Widget.MaterialComponents.Chip.Filter"/>
+
+                            <com.google.android.material.chip.Chip
+                                android:id="@+id/chipMul"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="✖️ Mul"
+                                style="@style/Widget.MaterialComponents.Chip.Filter"/>
+
+                            <com.google.android.material.chip.Chip
+                                android:id="@+id/chipDiv"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="➗ Div"
+                                style="@style/Widget.MaterialComponents.Chip.Filter"/>
+                        </com.google.android.material.chip.ChipGroup>
+                    </LinearLayout>
+
+                    <!-- LANG SKILLS -->
+                     <LinearLayout
+                        android:id="@+id/layoutLanguages"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:visibility="gone">
+                        
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Target Languages"
+                            android:textStyle="bold"
+                            android:layout_marginTop="16dp"
+                            android:layout_marginBottom="8dp"/>
+                        
+                        <com.google.android.material.chip.ChipGroup
+                            android:id="@+id/chipGroupLanguages"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            app:singleSelection="false"
+                            app:chipSpacingHorizontal="8dp">
+
+                            <com.google.android.material.chip.Chip
+                                android:id="@+id/chipSpanish"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="🇪🇸 Spanish"
+                                style="@style/Widget.MaterialComponents.Chip.Filter"/>
+
+                            <com.google.android.material.chip.Chip
+                                android:id="@+id/chipFrench"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="🇫🇷 French"
+                                style="@style/Widget.MaterialComponents.Chip.Filter"/>
+                                
+                            <com.google.android.material.chip.Chip
+                                android:id="@+id/chipGerman"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="🇩🇪 German"
+                                style="@style/Widget.MaterialComponents.Chip.Filter"/>
+
+                            <com.google.android.material.chip.Chip
+                                android:id="@+id/chipHindi"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="🇮🇳 Hindi"
+                                style="@style/Widget.MaterialComponents.Chip.Filter"/>
+                        </com.google.android.material.chip.ChipGroup>
+                    </LinearLayout>
+                    
+                     <!-- SESSION DURATION -->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Re-lock Timer"
+                        android:textStyle="bold"
+                        android:layout_marginTop="24dp"
+                        android:layout_marginBottom="4dp"/>
+                        
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical">
+                        
+                        <com.google.android.material.slider.Slider
+                            android:id="@+id/sliderDuration"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:valueFrom="1"
+                            android:valueTo="60"
+                            android:stepSize="1"
+                            android:value="15"/>
+                            
+                        <TextView
+                            android:id="@+id/tvDurationValue"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="15m"
+                            android:layout_marginStart="8dp"
+                            android:textColor="#666666"/>
+                    </LinearLayout>
+                    
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- SUPPORT CARD -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Support"
+                android:textStyle="bold"
+                android:textColor="#666666"
+                android:layout_marginBottom="8dp"
+                android:layout_marginStart="4dp"/>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cardFeedback"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="32dp"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="2dp"
+                android:clickable="true"
+                android:focusable="true">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="20dp"
+                    android:gravity="center_vertical"
+                    android:background="@color/white">
+
+                    <ImageView
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:src="@android:drawable/ic_dialog_email"
+                        app:tint="@color/purple_500"/>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:layout_marginStart="16dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Send Feedback"
+                            android:textSize="18sp"
+                            android:textStyle="bold"
+                            android:textColor="@color/text_dark"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Share your ideas &amp; suggestions"
+                            android:textSize="14sp"
+                            android:textColor="@color/text_hint"/>
+                    </LinearLayout>
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <TextView
+                android:id="@+id/tvPrivacy"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Privacy Policy"
+                android:textColor="@color/purple_500"
+                android:textStyle="bold"
+                android:layout_gravity="center"
+                android:layout_marginBottom="80dp"
+                android:padding="12dp"
+                android:clickable="true"
+                android:focusable="true"/>
+
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
+    <com.google.android.gms.ads.AdView
+        xmlns:ads="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/adView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:background="#FFFFFF"
+        ads:adSize="BANNER"
+        ads:adUnitId="ca-app-pub-3940256099942544/6300978111" />
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

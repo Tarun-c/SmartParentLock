@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#E3F2FD"
+    android:clickable="true"
+    android:focusable="true">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:padding="24dp">
+
+            <!-- Title Header -->
+            <TextView
+                android:id="@+id/tvTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="🧠 Brain Time!"
+                android:textSize="28sp"
+                android:textStyle="bold"
+                android:textColor="#1976D2"
+                android:layout_marginBottom="24dp"/>
+
+            <!-- Question Card -->
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_card_white"
+                android:padding="32dp"
+                android:layout_marginBottom="32dp"
+                android:elevation="4dp">
+                
+                <TextView
+                    android:id="@+id/tvQuestion"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Question"
+                    android:textSize="32sp"
+                    android:textStyle="bold"
+                    android:textColor="#333333"
+                    android:gravity="center"
+                    android:layout_gravity="center"/>
+            </FrameLayout>
+
+            <!-- Options Grid -->
+            <LinearLayout
+                android:id="@+id/optionsContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center"
+                    android:layout_marginBottom="16dp">
+
+                    <androidx.appcompat.widget.AppCompatButton
+                        android:id="@+id/btnOption1"
+                        android:layout_width="0dp"
+                        android:layout_height="100dp"
+                        android:layout_weight="1"
+                        android:text="A"
+                        android:textSize="20sp"
+                        android:textColor="@color/purple_700"
+                        android:textStyle="bold"
+                        android:background="@drawable/bg_option_button"
+                        android:layout_marginEnd="8dp"
+                        android:gravity="center"/>
+
+                    <androidx.appcompat.widget.AppCompatButton
+                        android:id="@+id/btnOption2"
+                        android:layout_width="0dp"
+                        android:layout_height="100dp"
+                        android:layout_weight="1"
+                        android:text="B"
+                        android:textSize="20sp"
+                        android:textColor="@color/purple_700"
+                        android:textStyle="bold"
+                        android:background="@drawable/bg_option_button"
+                        android:layout_marginStart="8dp"
+                        android:gravity="center"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center">
+
+                    <androidx.appcompat.widget.AppCompatButton
+                        android:id="@+id/btnOption3"
+                        android:layout_width="0dp"
+                        android:layout_height="100dp"
+                        android:layout_weight="1"
+                        android:text="C"
+                        android:textSize="20sp"
+                        android:textColor="@color/purple_700"
+                        android:textStyle="bold"
+                        android:background="@drawable/bg_option_button"
+                        android:layout_marginEnd="8dp"
+                        android:gravity="center"/>
+
+                    <androidx.appcompat.widget.AppCompatButton
+                        android:id="@+id/btnOption4"
+                        android:layout_width="0dp"
+                        android:layout_height="100dp"
+                        android:layout_weight="1"
+                        android:text="D"
+                        android:textSize="20sp"
+                        android:textColor="@color/purple_700"
+                        android:textStyle="bold"
+                        android:background="@drawable/bg_option_button"
+                        android:layout_marginStart="8dp"
+                        android:gravity="center"/>
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <!-- PIN Container (Hidden primarily) -->
+            <LinearLayout
+                android:id="@+id/pinContainer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone"
+                android:background="@drawable/bg_card_white"
+                android:padding="24dp"
+                android:gravity="center">
+
+                <LinearLayout
+                    android:id="@+id/pinDotsService"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginBottom="24dp">
+                    <View android:id="@+id/dotS1" android:layout_width="16dp" android:layout_height="16dp" android:background="@drawable/pin_dot_empty" android:layout_marginHorizontal="8dp"/>
+                    <View android:id="@+id/dotS2" android:layout_width="16dp" android:layout_height="16dp" android:background="@drawable/pin_dot_empty" android:layout_marginHorizontal="8dp"/>
+                    <View android:id="@+id/dotS3" android:layout_width="16dp" android:layout_height="16dp" android:background="@drawable/pin_dot_empty" android:layout_marginHorizontal="8dp"/>
+                    <View android:id="@+id/dotS4" android:layout_width="16dp" android:layout_height="16dp" android:background="@drawable/pin_dot_empty" android:layout_marginHorizontal="8dp"/>
+                </LinearLayout>
+
+                <GridLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:columnCount="3"
+                    android:rowCount="4">
+                    <Button android:id="@+id/btnS1" android:layout_width="60dp" android:layout_height="60dp" android:text="1" android:textSize="20sp" style="?attr/materialButtonOutlinedStyle"/>
+                    <Button android:id="@+id/btnS2" android:layout_width="60dp" android:layout_height="60dp" android:text="2" android:textSize="20sp" style="?attr/materialButtonOutlinedStyle"/>
+                    <Button android:id="@+id/btnS3" android:layout_width="60dp" android:layout_height="60dp" android:text="3" android:textSize="20sp" style="?attr/materialButtonOutlinedStyle"/>
+                    <Button android:id="@+id/btnS4" android:layout_width="60dp" android:layout_height="60dp" android:text="4" android:textSize="20sp" style="?attr/materialButtonOutlinedStyle"/>
+                    <Button android:id="@+id/btnS5" android:layout_width="60dp" android:layout_height="60dp" android:text="5" android:textSize="20sp" style="?attr/materialButtonOutlinedStyle"/>
+                    <Button android:id="@+id/btnS6" android:layout_width="60dp" android:layout_height="60dp" android:text="6" android:textSize="20sp" style="?attr/materialButtonOutlinedStyle"/>
+                    <Button android:id="@+id/btnS7" android:layout_width="60dp" android:layout_height="60dp" android:text="7" android:textSize="20sp" style="?attr/materialButtonOutlinedStyle"/>
+                    <Button android:id="@+id/btnS8" android:layout_width="60dp" android:layout_height="60dp" android:text="8" android:textSize="20sp" style="?attr/materialButtonOutlinedStyle"/>
+                    <Button android:id="@+id/btnS9" android:layout_width="60dp" android:layout_height="60dp" android:text="9" android:textSize="20sp" style="?attr/materialButtonOutlinedStyle"/>
+                    <View android:layout_width="60dp" android:layout_height="60dp"/>
+                    <Button android:id="@+id/btnS0" android:layout_width="60dp" android:layout_height="60dp" android:text="0" android:textSize="20sp" style="?attr/materialButtonOutlinedStyle"/>
+                    <Button android:id="@+id/btnSDelete" android:layout_width="60dp" android:layout_height="60dp" android:text="⌫" android:textSize="20sp" style="?attr/materialButtonOutlinedStyle"/>
+                </GridLayout>
+
+
+                <Button
+                    android:id="@+id/btnBackToQuiz"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Back to Quiz"
+                    style="@style/Widget.MaterialComponents.Button.TextButton"
+                    android:textColor="#1976D2"
+                    android:layout_marginTop="16dp"/>
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/btnEmergency"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/emergency_exit"
+                android:textColor="#D32F2F"
+                style="@style/Widget.MaterialComponents.Button.TextButton"
+                android:layout_marginTop="32dp"/>
+
+        </LinearLayout>
+    </ScrollView>
+</FrameLayout>

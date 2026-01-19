@@ -1,0 +1,63 @@
+<resources>
+    <string name="app_name">Smart Parent Lock</string>
+    <string name="enable_lock">Enable Parent Lock</string>
+    <string name="disable_lock">Disable Parent Lock</string>
+    <string name="set_pin">Change PIN</string>
+    <string name="enter_pin">Enter PIN</string>
+    <string name="settings">Settings</string>
+    <string name="challenge_type">Challenge Type</string>
+    <string name="difficulty">Difficulty</string>
+    <string name="save">Save</string>
+    <string name="emergency_exit">Emergency Exit</string>
+    <string name="solve_to_unlock">Solve to Unlock</string>
+    <string name="permission_required">Permission Required</string>
+    <string name="overlay_permission_msg">This app requires overlay permission to function.</string>
+    <string name="grant">Grant</string>
+    <string name="admin_label">Uninstall Protection</string>
+    <string name="admin_description">Prevents the application from being uninstalled without parent approval.</string>
+    <string name="prevent_uninstall">Prevent Uninstalling</string>
+    
+    <!-- Feedback -->
+    <string name="feedback_no_email_app">No email app found installed on device</string>
+    <string name="feedback_error_subject">Please enter a subject</string>
+    <string name="feedback_error_message">Please enter a description</string>
+    <string name="feedback_email_chooser">Send Feedback...</string>
+    
+    <!-- MainActivity -->
+    <string name="lock_enabled_toast">Lock Enabled</string>
+    <string name="lock_disabled_toast">Lock Disabled</string>
+    <string name="verify_lock_disable_title">Disable Smart Lock</string>
+    <string name="verify_lock_disable_subtitle">Enter PIN to turn off protection</string>
+    <string name="default_math_toast">Math enabled by default for protection</string>
+    <string name="set_new_pin_toast">Please set a new PIN</string>
+    <string name="verify_admin_remove_title">Remove Admin</string>
+    <string name="verify_admin_remove_subtitle">Enter PIN to allow uninstall</string>
+    <string name="admin_disabled_toast">Uninstall Protection Disabled</string>
+    <string name="dialog_select_challenge_title">Select Learning Challenge</string>
+    <string name="dialog_select_challenge_msg">Please select at least one challenge type for your child before exiting.</string>
+    <string name="verification_canceled">Verification Canceled</string>
+    <string name="ok">OK</string>
+    
+    <!-- Lock Service -->
+    <string name="unlock_swipe_instruction">Swipe or Tap to Unlock</string>
+    <string name="unlock_button_text">UNLOCK</string>
+    <string name="parent_auth_title">Parent Authentication</string>
+    <string name="parent_auth_instruction">Enter PIN to proceed</string>
+    <string name="notification_title">Smart Parent Lock Active</string>
+    <string name="notification_text">Child mode is enabled. Screen will be locked.</string>
+    <string name="timer_updated">Timer Updated</string>
+    <string name="pin_incorrect">Incorrect PIN</string>
+    <string name="pin_authenticated">Authenticated</string>
+    
+    <!-- Pin Activity -->
+    <string name="pin_confirm_title">Confirm PIN</string>
+    <string name="pin_confirm_subtitle">Re-enter your PIN to confirm</string>
+    <string name="pin_create_title">Create Parent PIN</string>
+    <string name="pin_create_subtitle">This PIN will protect parent settings</string>
+    <string name="pin_enter_title">Enter Parent PIN</string>
+    <string name="pin_verify_subtitle">Enter PIN to confirm this action</string>
+    <string name="pin_access_subtitle">Enter your PIN to access settings</string>
+    <string name="pin_success">PIN set successfully!</string>
+    <string name="pin_mismatch">PINs do not match. Try again.</string>
+    <string name="pin_required_back">Please enter PIN to continue</string>
+</resources>

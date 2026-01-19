@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="purple_200">#FFBB86FC</color>
+    <color name="purple_500">#4E8DFF</color> <!-- Replaced with Primary Blue -->
+    <color name="purple_700">#0056D2</color> <!-- Replaced with Primary Dark -->
+    <color name="teal_200">#FFB74D</color> <!-- Accent Orange -->
+    <color name="teal_700">#F57C00</color>
+    <color name="black">#2D3436</color>
+    <color name="white">#FFFFFF</color>
+    
+    <color name="background_page">#F2F6FC</color>
+    <color name="text_dark">#2D3436</color>
+    <color name="text_hint">#636E72</color>
+    
+    <color name="color_lock_status">#6C5CE7</color>
+    <color name="color_security">#FF7675</color>
+    <color name="color_learning">#0984E3</color>
+    
+    <!-- Launcher Icon Background -->
+    <color name="ic_launcher_background">#FFFFFF</color>
+</resources>

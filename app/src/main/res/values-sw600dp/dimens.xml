@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Tablet dimensions (7" and larger) -->
+    
+    <!-- Text Sizes - Larger for tablets -->
+    <dimen name="text_size_title">36sp</dimen>
+    <dimen name="text_size_subtitle">20sp</dimen>
+    <dimen name="text_size_body">18sp</dimen>
+    <dimen name="text_size_small">16sp</dimen>
+    <dimen name="text_size_button">18sp</dimen>
+    
+    <!-- Spacing - More generous on tablets -->
+    <dimen name="spacing_tiny">6dp</dimen>
+    <dimen name="spacing_small">12dp</dimen>
+    <dimen name="spacing_medium">24dp</dimen>
+    <dimen name="spacing_large">32dp</dimen>
+    <dimen name="spacing_xlarge">48dp</dimen>
+    
+    <!-- Card/Container -->
+    <dimen name="card_corner_radius">20dp</dimen>
+    <dimen name="card_elevation">4dp</dimen>
+    <dimen name="card_padding">32dp</dimen>
+    
+    <!-- Icons - Larger for tablets -->
+    <dimen name="icon_size_small">32dp</dimen>
+    <dimen name="icon_size_medium">48dp</dimen>
+    <dimen name="icon_size_large">56dp</dimen>
+    <dimen name="icon_size_xlarge">180dp</dimen>
+    
+    <!-- Onboarding -->
+    <dimen name="onboarding_image_padding">48dp</dimen>
+    <dimen name="onboarding_title_size">36sp</dimen>
+    <dimen name="onboarding_desc_size">20sp</dimen>
+    <dimen name="onboarding_card_padding">48dp</dimen>
+    
+    <!-- Lock Screen -->
+    <dimen name="lock_question_size">24sp</dimen>
+    <dimen name="lock_button_height">64dp</dimen>
+    <dimen name="lock_button_margin">12dp</dimen>
+</resources>
