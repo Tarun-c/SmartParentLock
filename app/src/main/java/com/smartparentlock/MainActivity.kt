@@ -197,18 +197,7 @@ class MainActivity : AppCompatActivity() {
         binding.switchLock.isChecked = settingsRepository.isLockEnabled()
         
         binding.switchLock.setOnClickListener {
-            if (mInterstitialAd != null) {
-                mInterstitialAd?.fullScreenContentCallback = object: FullScreenContentCallback() {
-                     override fun onAdDismissedFullScreenContent() {
-                         mInterstitialAd = null
-                         loadInterstitial()
-                         performLockToggle()
-                     }
-                }
-                mInterstitialAd?.show(this)
-            } else {
-                performLockToggle()
-            }
+            performLockToggle()
         }
         
         // Learning Mode Switch
