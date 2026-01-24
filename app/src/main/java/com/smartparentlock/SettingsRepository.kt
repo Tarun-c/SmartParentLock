@@ -129,6 +129,15 @@ class SettingsRepository(context: Context) {
         private const val KEY_SESSION_DURATION = "session_duration"
         private const val KEY_CHILD_AGE = "child_age"
         private const val KEY_LEARNING_ENABLED = "learning_enabled"
+        private const val KEY_SERVICE_DISCLOSURE_ACCEPTED = "service_disclosure_accepted"
+    }
+    
+    fun hasAcceptedServiceDisclosure(): Boolean {
+        return sharedPreferences.getBoolean(KEY_SERVICE_DISCLOSURE_ACCEPTED, false)
+    }
+    
+    fun setServiceDisclosureAccepted(accepted: Boolean) {
+        sharedPreferences.edit().putBoolean(KEY_SERVICE_DISCLOSURE_ACCEPTED, accepted).apply()
     }
 
     fun isLearningEnabled(): Boolean {

@@ -60,4 +60,10 @@
     <string name="pin_success">PIN set successfully!</string>
     <string name="pin_mismatch">PINs do not match. Try again.</string>
     <string name="pin_required_back">Please enter PIN to continue</string>
+    
+    <!-- Foreground Service Disclosure -->
+    <string name="service_disclosure_title">Background Service Notice</string>
+    <string name="service_disclosure_message">Smart Parent Lock needs to run a background service to:\n\n• Monitor when your child unlocks the device\n• Display educational challenges before device access\n• Show a persistent notification while protection is active\n\nThis service runs continuously to ensure your child solves a learning challenge every time they use the device.\n\nDo you want to enable this protection?</string>
+    <string name="service_disclosure_accept">Enable Protection</string>
+    <string name="service_disclosure_decline">Not Now</string>
 </resources>

@@ -472,12 +472,18 @@ class MainActivity : AppCompatActivity() {
         val intent = Intent(this, LockService::class.java)
         stopService(intent)
     }
+    
     private fun performLockToggle() {
         val isChecked = binding.switchLock.isChecked
         if (isChecked) {
-            settingsRepository.setLockEnabled(true)
-            startLockService(startHidden = true) 
-            Toast.makeText(this, getString(R.string.lock_enabled_toast), Toast.LENGTH_SHORT).show()
+            // Check if user has accepted service disclosure (first time only)
+            if (!settingsRepository.hasAcceptedServiceDisclosure()) {
+                // Show disclosure dialog first
+                showServiceDisclosureDialog()
+            } else {
+                // Already accepted, enable directly
+                enableLockProtection()
+            }
         } else {
             // Require PIN to disable
             binding.switchLock.isChecked = true 
@@ -487,6 +493,29 @@ class MainActivity : AppCompatActivity() {
             intent.putExtra("SUBTITLE", getString(R.string.verify_lock_disable_subtitle))
             startActivityForResult(intent, VERIFY_PIN_REQ_CODE)
         }
+    }
+    
+    private fun showServiceDisclosureDialog() {
+        AlertDialog.Builder(this)
+            .setTitle(getString(R.string.service_disclosure_title))
+            .setMessage(getString(R.string.service_disclosure_message))
+            .setPositiveButton(getString(R.string.service_disclosure_accept)) { _, _ ->
+                // User accepted
+                settingsRepository.setServiceDisclosureAccepted(true)
+                enableLockProtection()
+            }
+            .setNegativeButton(getString(R.string.service_disclosure_decline)) { _, _ ->
+                // User declined, reset switch
+                binding.switchLock.isChecked = false
+            }
+            .setCancelable(false)
+            .show()
+    }
+    
+    private fun enableLockProtection() {
+        settingsRepository.setLockEnabled(true)
+        startLockService(startHidden = true) 
+        Toast.makeText(this, getString(R.string.lock_enabled_toast), Toast.LENGTH_SHORT).show()
     }
 
     private fun loadInterstitial() {
