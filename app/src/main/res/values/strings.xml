@@ -43,8 +43,8 @@
     <string name="unlock_button_text">UNLOCK</string>
     <string name="parent_auth_title">Parent Authentication</string>
     <string name="parent_auth_instruction">Enter PIN to proceed</string>
-    <string name="notification_title">Smart Parent Lock Active</string>
-    <string name="notification_text">Child mode is enabled. Screen will be locked.</string>
+    <string name="notification_title">Parental Control Active</string>
+    <string name="notification_text">Monitoring screen unlocks to show educational challenges</string>
     <string name="timer_updated">Timer Updated</string>
     <string name="pin_incorrect">Incorrect PIN</string>
     <string name="pin_authenticated">Authenticated</string>
