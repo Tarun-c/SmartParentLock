@@ -212,7 +212,9 @@ class MainActivity : AppCompatActivity() {
         binding.switchLearning.isChecked = settingsRepository.isLearningEnabled()
         val updateLearningUI = { enabled: Boolean ->
              binding.chipGroupInfo.isEnabled = enabled
-             binding.sliderAge.isEnabled = enabled
+             binding.btnAgeDecrease.isEnabled = enabled
+             binding.btnAgeIncrease.isEnabled = enabled
+             binding.tvAgeValue.isEnabled = enabled
              for (i in 0 until binding.chipGroupInfo.childCount) {
                  binding.chipGroupInfo.getChildAt(i).isEnabled = enabled
              }
@@ -274,21 +276,93 @@ class MainActivity : AppCompatActivity() {
              binding.layoutLanguages.visibility = if (newSet.contains(ChallengeType.TRANSLATION)) View.VISIBLE else View.GONE
         }
 
-        binding.sliderAge.addOnChangeListener { _, value, _ ->
-             val age = value.toInt()
-             binding.tvAgeValue.text = "$age yrs"
-             settingsRepository.setChildAge(age)
+        // AGE PICKER - Initialize with saved value
+        var currentAge = settingsRepository.getChildAge()
+        binding.tvAgeValue.text = "$currentAge yrs"
+        
+        fun updateAge(newAge: Int) {
+            val clampedAge = newAge.coerceIn(3, 16)
+            currentAge = clampedAge
+            binding.tvAgeValue.text = "$clampedAge yrs"
+            settingsRepository.setChildAge(clampedAge)
+        }
+        
+        binding.btnAgeDecrease.setOnClickListener {
+            updateAge(currentAge - 1)
+        }
+        
+        binding.btnAgeIncrease.setOnClickListener {
+            updateAge(currentAge + 1)
+        }
+        
+        binding.tvAgeValue.setOnClickListener {
+            // Show dialog for direct input
+            val editText = android.widget.EditText(this).apply {
+                inputType = android.text.InputType.TYPE_CLASS_NUMBER
+                hint = "3-16"
+                setText(currentAge.toString())
+                gravity = android.view.Gravity.CENTER
+                textSize = 20f
+            }
+            AlertDialog.Builder(this)
+                .setTitle("Enter Child Age")
+                .setMessage("Enter age between 3 and 16 years")
+                .setView(editText)
+                .setPositiveButton("OK") { _, _ ->
+                    val input = editText.text.toString().toIntOrNull()
+                    if (input != null) {
+                        updateAge(input)
+                    }
+                }
+                .setNegativeButton("Cancel", null)
+                .show()
         }
 
-        binding.sliderDuration.addOnChangeListener { _, value, _ ->
-            val minutes = value.toInt()
-            binding.tvDurationValue.text = "${minutes}m"
-            settingsRepository.setSessionDurationMinutes(minutes)
+        // DURATION PICKER - Initialize with saved value
+        var currentDuration = settingsRepository.getSessionDurationMinutes()
+        binding.tvDurationValue.text = "$currentDuration min"
+        
+        fun updateDuration(newDuration: Int) {
+            val clampedDuration = newDuration.coerceIn(1, 60)
+            currentDuration = clampedDuration
+            binding.tvDurationValue.text = "$clampedDuration min"
+            settingsRepository.setSessionDurationMinutes(clampedDuration)
             
             // Notify Service to update active timer immediately if possible
             val intent = Intent(this, LockService::class.java)
             intent.action = "UPDATE_TIMER"
             startService(intent)
+        }
+        
+        binding.btnDurationDecrease.setOnClickListener {
+            updateDuration(currentDuration - 1)
+        }
+        
+        binding.btnDurationIncrease.setOnClickListener {
+            updateDuration(currentDuration + 1)
+        }
+        
+        binding.tvDurationValue.setOnClickListener {
+            // Show dialog for direct input
+            val editText = android.widget.EditText(this).apply {
+                inputType = android.text.InputType.TYPE_CLASS_NUMBER
+                hint = "1-60"
+                setText(currentDuration.toString())
+                gravity = android.view.Gravity.CENTER
+                textSize = 20f
+            }
+            AlertDialog.Builder(this)
+                .setTitle("Enter Re-lock Timer")
+                .setMessage("Enter duration between 1 and 60 minutes")
+                .setView(editText)
+                .setPositiveButton("OK") { _, _ ->
+                    val input = editText.text.toString().toIntOrNull()
+                    if (input != null) {
+                        updateDuration(input)
+                    }
+                }
+                .setNegativeButton("Cancel", null)
+                .show()
         }
         
         binding.btnSetPin.setOnClickListener {

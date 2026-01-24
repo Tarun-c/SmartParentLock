@@ -216,13 +216,13 @@
                             android:layout_height="wrap_content"/>
                     </LinearLayout>
 
-                    <!-- AGE SLIDER -->
+                    <!-- AGE PICKER -->
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
                         android:gravity="center_vertical"
-                        android:layout_marginBottom="12dp">
+                        android:layout_marginBottom="16dp">
                         
                         <TextView
                             android:layout_width="wrap_content"
@@ -232,25 +232,48 @@
                             
                          <View android:layout_width="0dp" android:layout_height="0dp" android:layout_weight="1"/>
                          
+                         <!-- Decrement Button -->
+                         <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btnAgeDecrease"
+                            android:layout_width="48dp"
+                            android:layout_height="48dp"
+                            android:text="−"
+                            android:textSize="24sp"
+                            android:insetTop="0dp"
+                            android:insetBottom="0dp"
+                            app:cornerRadius="24dp"
+                            style="@style/Widget.MaterialComponents.Button.OutlinedButton"/>
+                         
+                         <!-- Tappable Value (opens dialog for direct input) -->
                          <TextView
                             android:id="@+id/tvAgeValue"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="7 yrs"
+                            android:minWidth="80dp"
+                            android:gravity="center"
                             android:background="@drawable/bg_option_button"
-                            android:paddingHorizontal="12dp"
-                            android:paddingVertical="4dp"
-                            android:textColor="@color/color_learning"/>
+                            android:paddingHorizontal="16dp"
+                            android:paddingVertical="12dp"
+                            android:layout_marginHorizontal="8dp"
+                            android:textSize="18sp"
+                            android:textStyle="bold"
+                            android:textColor="@color/color_learning"
+                            android:clickable="true"
+                            android:focusable="true"/>
+                         
+                         <!-- Increment Button -->
+                         <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btnAgeIncrease"
+                            android:layout_width="48dp"
+                            android:layout_height="48dp"
+                            android:text="+"
+                            android:textSize="24sp"
+                            android:insetTop="0dp"
+                            android:insetBottom="0dp"
+                            app:cornerRadius="24dp"
+                            style="@style/Widget.MaterialComponents.Button.OutlinedButton"/>
                     </LinearLayout>
-
-                    <com.google.android.material.slider.Slider
-                        android:id="@+id/sliderAge"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:valueFrom="3"
-                        android:valueTo="16"
-                        android:stepSize="1"
-                        android:value="7"/>
                         
                     <!-- CHALLENGE SLIDER -->
                     <TextView
@@ -418,36 +441,62 @@
                     </LinearLayout>
                     
                      <!-- SESSION DURATION -->
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Re-lock Timer"
-                        android:textStyle="bold"
-                        android:layout_marginTop="24dp"
-                        android:layout_marginBottom="4dp"/>
-                        
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:gravity="center_vertical">
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:layout_marginTop="24dp">
                         
-                        <com.google.android.material.slider.Slider
-                            android:id="@+id/sliderDuration"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:valueFrom="1"
-                            android:valueTo="60"
-                            android:stepSize="1"
-                            android:value="15"/>
-                            
                         <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Re-lock Timer"
+                            android:textStyle="bold"/>
+                            
+                         <View android:layout_width="0dp" android:layout_height="0dp" android:layout_weight="1"/>
+                         
+                         <!-- Decrement Button -->
+                         <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btnDurationDecrease"
+                            android:layout_width="48dp"
+                            android:layout_height="48dp"
+                            android:text="−"
+                            android:textSize="24sp"
+                            android:insetTop="0dp"
+                            android:insetBottom="0dp"
+                            app:cornerRadius="24dp"
+                            style="@style/Widget.MaterialComponents.Button.OutlinedButton"/>
+                         
+                         <!-- Tappable Value (opens dialog for direct input) -->
+                         <TextView
                             android:id="@+id/tvDurationValue"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="15m"
-                            android:layout_marginStart="8dp"
-                            android:textColor="#666666"/>
+                            android:text="15 min"
+                            android:minWidth="80dp"
+                            android:gravity="center"
+                            android:background="@drawable/bg_option_button"
+                            android:paddingHorizontal="16dp"
+                            android:paddingVertical="12dp"
+                            android:layout_marginHorizontal="8dp"
+                            android:textSize="18sp"
+                            android:textStyle="bold"
+                            android:textColor="@color/purple_700"
+                            android:clickable="true"
+                            android:focusable="true"/>
+                         
+                         <!-- Increment Button -->
+                         <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btnDurationIncrease"
+                            android:layout_width="48dp"
+                            android:layout_height="48dp"
+                            android:text="+"
+                            android:textSize="24sp"
+                            android:insetTop="0dp"
+                            android:insetBottom="0dp"
+                            app:cornerRadius="24dp"
+                            style="@style/Widget.MaterialComponents.Button.OutlinedButton"/>
                     </LinearLayout>
                     
                 </LinearLayout>

@@ -34,18 +34,42 @@ class LockService : Service() {
     private val handler = Handler(Looper.getMainLooper())
     private val lockRunnable = Runnable { 
         sessionExpiryTime = 0 // Expire strictly
+        screenWentOff = false // Reset so overlay shows immediately
         showOverlay(false) 
     }
     
     private var sessionExpiryTime: Long = 0
+    private var screenWentOff: Boolean = true // Start as true so first unlock shows overlay
     
     private val screenReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
-            if (intent?.action == Intent.ACTION_SCREEN_ON) {
-                 // Only verify lock if session has expired
-                 if (System.currentTimeMillis() > sessionExpiryTime) {
-                     showOverlay(false)
-                 }
+            when (intent?.action) {
+                Intent.ACTION_SCREEN_OFF -> {
+                    // Screen turned off - next unlock should show the overlay
+                    screenWentOff = true
+                    // Cancel the timer since screen is off
+                    handler.removeCallbacks(lockRunnable)
+                }
+                Intent.ACTION_SCREEN_ON -> {
+                    // Screen turned on - check if we need to show overlay
+                    // For devices without a secure lock screen
+                    val keyguardManager = getSystemService(Context.KEYGUARD_SERVICE) as android.app.KeyguardManager
+                    if (!keyguardManager.isKeyguardSecure) {
+                        // No lock screen - show overlay immediately when screen turns on
+                        if (screenWentOff || System.currentTimeMillis() > sessionExpiryTime) {
+                            showOverlay(false)
+                        }
+                    }
+                    // If device has lock screen, wait for ACTION_USER_PRESENT
+                }
+                Intent.ACTION_USER_PRESENT -> {
+                    // User unlocked their device (pattern/PIN/fingerprint)
+                    // ALWAYS show overlay after unlocking (if screen was off)
+                    // OR if timer expired during active use
+                    if (screenWentOff || System.currentTimeMillis() > sessionExpiryTime) {
+                        showOverlay(false)
+                    }
+                }
             }
         }
     }
@@ -58,7 +82,12 @@ class LockService : Service() {
         
         startForeground(NOTIFICATION_ID, createNotification())
         
-        val filter = IntentFilter(Intent.ACTION_SCREEN_ON)
+        // Listen for screen state changes and user unlock
+        val filter = IntentFilter().apply {
+            addAction(Intent.ACTION_SCREEN_ON)
+            addAction(Intent.ACTION_SCREEN_OFF)
+            addAction(Intent.ACTION_USER_PRESENT)
+        }
         registerReceiver(screenReceiver, filter)
     }
 
@@ -365,6 +394,7 @@ class LockService : Service() {
         handler.removeCallbacks(lockRunnable)
         val delay = minutes * 60 * 1000L
         sessionExpiryTime = System.currentTimeMillis() + delay
+        screenWentOff = false // Reset - user solved challenge, allow free use until screen goes off or timer expires
         handler.postDelayed(lockRunnable, delay)
     }
 
