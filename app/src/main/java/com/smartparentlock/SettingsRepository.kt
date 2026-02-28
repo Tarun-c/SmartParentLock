@@ -126,8 +126,8 @@ class SettingsRepository(context: Context) {
     }
 
     fun getLanguageEnabled(lang: SupportedLanguage): Boolean {
-        // Default: Spanish True, others False
-        val default = (lang == SupportedLanguage.SPANISH)
+        // Default: Hindi True, others False
+        val default = (lang == SupportedLanguage.HINDI)
         return sharedPreferences.getBoolean("lang_enabled_${lang.name}", default)
     }
 

@@ -275,6 +275,32 @@ class MainActivity : AppCompatActivity() {
              binding.layoutMathSkills.visibility = if (newSet.contains(ChallengeType.MATH) || newSet.isEmpty()) View.VISIBLE else View.GONE
              binding.layoutLanguages.visibility = if (newSet.contains(ChallengeType.TRANSLATION)) View.VISIBLE else View.GONE
         }
+        
+        // Initialize Math Skills
+        binding.chipAdd.isChecked = settingsRepository.getMathSkill(MathOp.ADD)
+        binding.chipSub.isChecked = settingsRepository.getMathSkill(MathOp.SUB)
+        binding.chipMul.isChecked = settingsRepository.getMathSkill(MathOp.MUL)
+        binding.chipDiv.isChecked = settingsRepository.getMathSkill(MathOp.DIV)
+
+        binding.chipGroupMathSkills.setOnCheckedStateChangeListener { _, checkedIds ->
+            settingsRepository.setMathSkill(MathOp.ADD, checkedIds.contains(R.id.chipAdd))
+            settingsRepository.setMathSkill(MathOp.SUB, checkedIds.contains(R.id.chipSub))
+            settingsRepository.setMathSkill(MathOp.MUL, checkedIds.contains(R.id.chipMul))
+            settingsRepository.setMathSkill(MathOp.DIV, checkedIds.contains(R.id.chipDiv))
+        }
+        
+        // Initialize Language Selection
+        binding.chipSpanish.isChecked = settingsRepository.getLanguageEnabled(SupportedLanguage.SPANISH)
+        binding.chipFrench.isChecked = settingsRepository.getLanguageEnabled(SupportedLanguage.FRENCH)
+        binding.chipGerman.isChecked = settingsRepository.getLanguageEnabled(SupportedLanguage.GERMAN)
+        binding.chipHindi.isChecked = settingsRepository.getLanguageEnabled(SupportedLanguage.HINDI)
+
+        binding.chipGroupLanguages.setOnCheckedStateChangeListener { _, checkedIds ->
+            settingsRepository.setLanguageEnabled(SupportedLanguage.SPANISH, checkedIds.contains(R.id.chipSpanish))
+            settingsRepository.setLanguageEnabled(SupportedLanguage.FRENCH, checkedIds.contains(R.id.chipFrench))
+            settingsRepository.setLanguageEnabled(SupportedLanguage.GERMAN, checkedIds.contains(R.id.chipGerman))
+            settingsRepository.setLanguageEnabled(SupportedLanguage.HINDI, checkedIds.contains(R.id.chipHindi))
+        }
 
         // AGE PICKER - Initialize with saved value
         var currentAge = settingsRepository.getChildAge()

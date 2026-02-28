@@ -323,16 +323,23 @@ class ChallengeManager(private val settingsRepository: SettingsRepository) {
         // Filter by age AND selected languages
         val enabledLangs = SupportedLanguage.values().filter { settingsRepository.getLanguageEnabled(it) }
         
-        // If nothing selected, default to Spanish
-        val langsToUse = if(enabledLangs.isNotEmpty()) enabledLangs else listOf(SupportedLanguage.SPANISH)
+        // If nothing selected, default to Hindi
+        val langsToUse = if(enabledLangs.isNotEmpty()) enabledLangs else listOf(SupportedLanguage.HINDI)
         
         val suitable = transList.filter { 
             it.minAge <= age && it.lang in langsToUse
         }
         
-        val item = if(suitable.isNotEmpty()) suitable.random() else {
-             // Fallback: Try finding any enabled lang, ignoring age, or just any Spanish
-             transList.firstOrNull { it.lang in langsToUse } ?: transList.first { it.lang == SupportedLanguage.SPANISH }
+        val item = if(suitable.isNotEmpty()) {
+            suitable.random() 
+        } else {
+             // Fallback: Try finding any enabled lang, ignoring age, or just any Hindi
+             val anyLangSuitable = transList.filter { it.lang in langsToUse }
+             if (anyLangSuitable.isNotEmpty()) {
+                 anyLangSuitable.random()
+             } else {
+                 transList.filter { it.lang == SupportedLanguage.HINDI }.random()
+             }
         }
         return createTextChallenge(item)
     }
