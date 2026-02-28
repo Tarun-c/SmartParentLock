@@ -184,12 +184,21 @@ class LockService : Service() {
     }
 
     private fun setupChallenge(view: View) {
+        val tvTitle = view.findViewById<TextView>(R.id.tvTitle)
         val tvQuestion = view.findViewById<TextView>(R.id.tvQuestion)
+        val optionsContainer = view.findViewById<View>(R.id.optionsContainer)
+        val pinContainer = view.findViewById<View>(R.id.pinContainer)
         val btnOption1 = view.findViewById<Button>(R.id.btnOption1)
         val btnOption2 = view.findViewById<Button>(R.id.btnOption2)
         val btnOption3 = view.findViewById<Button>(R.id.btnOption3)
         val btnOption4 = view.findViewById<Button>(R.id.btnOption4)
         val btnEmergency = view.findViewById<Button>(R.id.btnEmergency)
+
+        // Reset visibility state from PIN mode
+        optionsContainer.visibility = View.VISIBLE
+        pinContainer.visibility = View.GONE
+        btnEmergency.visibility = View.VISIBLE
+        tvTitle.text = "🧠 Brain Time!"
 
         if (!settingsRepository.isLearningEnabled()) {
              // Simple Unlock Mode

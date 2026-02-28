@@ -366,11 +366,10 @@ class MainActivity : AppCompatActivity() {
         }
         
         binding.btnSetPin.setOnClickListener {
-            // Clear PIN and restart to set new one
-            settingsRepository.clearPin()
             Toast.makeText(this, getString(R.string.set_new_pin_toast), Toast.LENGTH_SHORT).show()
             val intent = Intent(this, PinActivity::class.java)
             intent.putExtra("FROM_WELCOME", true) // Skip onboarding
+            intent.putExtra("CHANGE_PIN_MODE", true)
             startActivity(intent)
             finish()
         }

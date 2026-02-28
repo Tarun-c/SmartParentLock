@@ -37,8 +37,9 @@ class PinActivity : AppCompatActivity() {
             findViewById(R.id.dot4)
         )
         
-        // Check if this is first time setup or verification
-        isSetupMode = settingsRepository.getPin() == null
+        // Check if this is first time setup, verification, or PIN change mode
+        val isChangeMode = intent.getBooleanExtra("CHANGE_PIN_MODE", false)
+        isSetupMode = settingsRepository.getPin() == null || isChangeMode
         isVerifyMode = intent.getBooleanExtra("VERIFY_MODE", false)
         
         // If first run and not coming from Welcome screen, show Welcome screen
@@ -185,6 +186,12 @@ class PinActivity : AppCompatActivity() {
         if (isVerifyMode) {
             setResult(RESULT_CANCELED)
             finish()
+            return
+        }
+        
+        val isChangeMode = intent.getBooleanExtra("CHANGE_PIN_MODE", false)
+        if (isChangeMode) {
+            goToMainActivity()
             return
         }
         
