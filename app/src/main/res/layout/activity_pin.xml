@@ -60,4 +60,14 @@
         <Button android:id="@+id/btnBackspace" android:layout_width="80dp" android:layout_height="80dp" android:text="⌫" android:textSize="24sp" style="?attr/materialButtonOutlinedStyle"/>
     </GridLayout>
 
+    <Button
+        android:id="@+id/btnForgotPin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Forgot PIN?"
+        style="@style/Widget.MaterialComponents.Button.TextButton"
+        android:textColor="#1976D2"
+        android:layout_marginTop="16dp"
+        android:visibility="gone"/>
+
 </LinearLayout>

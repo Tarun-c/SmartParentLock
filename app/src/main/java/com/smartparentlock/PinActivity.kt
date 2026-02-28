@@ -6,6 +6,17 @@ import android.view.View
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
+import android.widget.EditText
+import android.widget.LinearLayout
+import android.widget.RadioGroup
+import android.widget.RadioButton
+import android.view.LayoutInflater
+import android.animation.ObjectAnimator
+import android.view.HapticFeedbackConstants
+import android.os.Build
+import com.google.android.material.textfield.TextInputEditText
+import com.google.android.material.textfield.TextInputLayout
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 
 class PinActivity : AppCompatActivity() {
@@ -52,6 +63,16 @@ class PinActivity : AppCompatActivity() {
         updateUI()
         
         setupNumberPad()
+        
+        val btnForgotPin = findViewById<Button>(R.id.btnForgotPin)
+        if (!isSetupMode && settingsRepository.getSecurityQuestion() != null) {
+            btnForgotPin.visibility = View.VISIBLE
+            btnForgotPin.setOnClickListener {
+                showForgotPinDialog()
+            }
+        } else {
+            btnForgotPin.visibility = View.GONE
+        }
     }
 
     private fun updateUI() {
@@ -148,7 +169,7 @@ class PinActivity : AppCompatActivity() {
                 if (enteredPin == confirmPin) {
                     settingsRepository.setPin(enteredPin)
                     Toast.makeText(this, getString(R.string.pin_success), Toast.LENGTH_SHORT).show()
-                    goToMainActivity()
+                    showSecurityQuestionSetupDialog()
                 } else {
                     Toast.makeText(this, getString(R.string.pin_mismatch), Toast.LENGTH_SHORT).show()
                     enteredPin = ""
@@ -180,6 +201,131 @@ class PinActivity : AppCompatActivity() {
         intent.putExtra("authenticated", true)
         startActivity(intent)
         finish()
+    }
+    
+    private fun showSecurityQuestionSetupDialog() {
+        val dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_security_question, null)
+        
+        val dialog = AlertDialog.Builder(this)
+            .setView(dialogView)
+            .setCancelable(false)
+            .create()
+            
+        // Transparent background so the CardView corners show
+        dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
+        
+        val rgQuestions = dialogView.findViewById<RadioGroup>(R.id.rgQuestions)
+        val layoutCustomQuestion = dialogView.findViewById<TextInputLayout>(R.id.layoutCustomQuestion)
+        val etCustomQuestion = dialogView.findViewById<TextInputEditText>(R.id.etCustomQuestion)
+        val etAnswer = dialogView.findViewById<TextInputEditText>(R.id.etAnswer)
+        val btnSaveQuestion = dialogView.findViewById<Button>(R.id.btnSaveQuestion)
+        
+        // Select first by default
+        rgQuestions.check(R.id.rbQuestion1)
+        
+        rgQuestions.setOnCheckedChangeListener { _, checkedId ->
+            if (checkedId == R.id.rbCustom) {
+                layoutCustomQuestion.visibility = View.VISIBLE
+            } else {
+                layoutCustomQuestion.visibility = View.GONE
+            }
+        }
+        
+        btnSaveQuestion.setOnClickListener {
+            val selectedId = rgQuestions.checkedRadioButtonId
+            
+            val q = if (selectedId == R.id.rbCustom) {
+                etCustomQuestion.text.toString().trim()
+            } else {
+                dialogView.findViewById<RadioButton>(selectedId).text.toString().trim()
+            }
+            
+            val a = etAnswer.text.toString().trim()
+            
+            if (q.isEmpty()) {
+                Toast.makeText(this, "Please select or enter a question", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+            if (a.isEmpty()) {
+                Toast.makeText(this, "Please enter an answer", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+            
+            settingsRepository.setSecurityQuestionAnswer(q, a)
+            Toast.makeText(this, "Security question saved", Toast.LENGTH_SHORT).show()
+            dialog.dismiss()
+            goToMainActivity()
+        }
+        
+        dialog.show()
+    }
+
+    private fun showForgotPinDialog() {
+        val question = settingsRepository.getSecurityQuestion()
+        
+        val dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_forgot_pin, null)
+        val dialog = AlertDialog.Builder(this)
+            .setView(dialogView)
+            .setCancelable(true)
+            .create()
+            
+        dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
+        
+        val tvSecurityQuestion = dialogView.findViewById<TextView>(R.id.tvSecurityQuestion)
+        val layoutAnswerRecovery = dialogView.findViewById<TextInputLayout>(R.id.layoutAnswerRecovery)
+        val etAnswerRecovery = dialogView.findViewById<TextInputEditText>(R.id.etAnswerRecovery)
+        val btnCancelRecovery = dialogView.findViewById<Button>(R.id.btnCancelRecovery)
+        val btnResetPin = dialogView.findViewById<Button>(R.id.btnResetPin)
+        
+        tvSecurityQuestion.text = question
+        
+        etAnswerRecovery.setOnFocusChangeListener { _, hasFocus -> 
+            if (hasFocus) layoutAnswerRecovery.error = null 
+        }
+        
+        btnCancelRecovery.setOnClickListener {
+            dialog.dismiss()
+        }
+        
+        btnResetPin.setOnClickListener {
+            val a = etAnswerRecovery.text.toString().trim().lowercase()
+            val actualAnswer = settingsRepository.getSecurityAnswer()?.lowercase()
+            
+            if (a.isEmpty()) {
+                Toast.makeText(this, "Please enter an answer", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+            
+            if (a == actualAnswer) {
+                layoutAnswerRecovery.error = null
+                // Answer matches! Clear PIN and restart activity in Setup Mode
+                settingsRepository.clearPin()
+                Toast.makeText(this, "Correct! Please set a new PIN.", Toast.LENGTH_LONG).show()
+                dialog.dismiss()
+                val intent = Intent(this, PinActivity::class.java)
+                intent.putExtra("FROM_WELCOME", true)
+                intent.putExtra("CHANGE_PIN_MODE", true)
+                startActivity(intent)
+                finish()
+            } else {
+                layoutAnswerRecovery.error = "Incorrect answer"
+                
+                // Shake Animation
+                ObjectAnimator.ofFloat(layoutAnswerRecovery, "translationX", 0f, 25f, -25f, 25f, -25f, 15f, -15f, 6f, -6f, 0f).apply {
+                    duration = 500
+                    start()
+                }
+                
+                // Vibrate/Haptic feedback
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                    layoutAnswerRecovery.performHapticFeedback(HapticFeedbackConstants.REJECT)
+                } else {
+                    layoutAnswerRecovery.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS)
+                }
+            }
+        }
+        
+        dialog.show()
     }
     
     override fun onBackPressed() {

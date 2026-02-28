@@ -40,6 +40,21 @@ class SettingsRepository(context: Context) {
     fun clearPin() {
         sharedPreferences.edit().remove(KEY_PIN).apply()
     }
+    
+    fun getSecurityQuestion(): String? {
+        return sharedPreferences.getString(KEY_SECURITY_QUESTION, null)
+    }
+    
+    fun getSecurityAnswer(): String? {
+        return sharedPreferences.getString(KEY_SECURITY_ANSWER, null)
+    }
+    
+    fun setSecurityQuestionAnswer(question: String, answer: String) {
+        sharedPreferences.edit()
+            .putString(KEY_SECURITY_QUESTION, question)
+            .putString(KEY_SECURITY_ANSWER, answer.lowercase().trim())
+            .apply()
+    }
 
     fun getEnabledChallengeTypes(): Set<ChallengeType> {
         val typesSet = sharedPreferences.getStringSet(KEY_CHALLENGE_TYPES_SET, null)
@@ -123,6 +138,8 @@ class SettingsRepository(context: Context) {
     companion object {
         private const val KEY_LOCK_ENABLED = "lock_enabled"
         private const val KEY_PIN = "parent_pin"
+        private const val KEY_SECURITY_QUESTION = "security_question"
+        private const val KEY_SECURITY_ANSWER = "security_answer"
         private const val KEY_CHALLENGE_TYPE = "challenge_type"
         private const val KEY_CHALLENGE_TYPES_SET = "challenge_types_set"
         private const val KEY_DIFFICULTY = "difficulty"
