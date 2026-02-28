@@ -56,6 +56,26 @@ import com.google.android.gms.ads.FullScreenContentCallback
  */
 class MainActivity : AppCompatActivity() {
 
+    private var isNavigatingInternal = false
+
+    private fun startInternalActivity(intent: android.content.Intent) {
+        isNavigatingInternal = true
+        super.startActivity(intent)
+    }
+
+    private fun startInternalActivityForResult(intent: android.content.Intent, requestCode: Int) {
+        isNavigatingInternal = true
+        super.startActivityForResult(intent, requestCode)
+    }
+
+    override fun onUserLeaveHint() {
+        super.onUserLeaveHint()
+        if (!isNavigatingInternal && !isFinishing && mInterstitialAd != null) {
+            mInterstitialAd?.show(this)
+            mInterstitialAd = null
+        }
+    }
+
     private lateinit var binding: ActivityMainBinding
     private lateinit var settingsRepository: SettingsRepository
     private lateinit var deviceAdmin: ComponentName
@@ -199,7 +219,7 @@ class MainActivity : AppCompatActivity() {
     private fun redirectToPinScreen() {
         val intent = Intent(this, PinActivity::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-        startActivity(intent)
+        startInternalActivity(intent)
         finish()
     }
 
@@ -402,7 +422,7 @@ class MainActivity : AppCompatActivity() {
             val intent = Intent(this, PinActivity::class.java)
             intent.putExtra("FROM_WELCOME", true) // Skip onboarding
             intent.putExtra("CHANGE_PIN_MODE", true)
-            startActivity(intent)
+            startInternalActivity(intent)
             finish()
         }
 
@@ -416,7 +436,7 @@ class MainActivity : AppCompatActivity() {
                     val intent = Intent(DevicePolicyManager.ACTION_ADD_DEVICE_ADMIN)
                     intent.putExtra(DevicePolicyManager.EXTRA_DEVICE_ADMIN, deviceAdmin)
                     intent.putExtra(DevicePolicyManager.EXTRA_ADD_EXPLANATION, getString(R.string.admin_description))
-                    startActivityForResult(intent, ADMIN_REQ_CODE)
+                    startInternalActivityForResult(intent, ADMIN_REQ_CODE)
                 }
              } else {
                  // Turning OFF Admin - Require Verification
@@ -428,7 +448,7 @@ class MainActivity : AppCompatActivity() {
                      intent.putExtra("VERIFY_MODE", true)
                      intent.putExtra("TITLE", getString(R.string.verify_admin_remove_title))
                      intent.putExtra("SUBTITLE", getString(R.string.verify_admin_remove_subtitle))
-                     startActivityForResult(intent, VERIFY_ADMIN_REQ_CODE)
+                     startInternalActivityForResult(intent, VERIFY_ADMIN_REQ_CODE)
                  }
 
              }
@@ -442,12 +462,12 @@ class MainActivity : AppCompatActivity() {
         binding.tvPrivacy.setOnClickListener {
             // Placeholder URL
             val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse("https://policies.google.com/privacy"))
-            startActivity(browserIntent)
+            startInternalActivity(browserIntent)
         }
     }
 
     private fun sendFeedback() {
-        startActivity(Intent(this, FeedbackActivity::class.java))
+        startInternalActivity(Intent(this, FeedbackActivity::class.java))
     }
 
     private fun checkPermissions(): Boolean {
@@ -456,7 +476,7 @@ class MainActivity : AppCompatActivity() {
                 Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
                 Uri.parse("package:$packageName")
             )
-            startActivityForResult(intent, PERM_REQ_CODE)
+            startInternalActivityForResult(intent, PERM_REQ_CODE)
             return false
         }
         return true
@@ -525,7 +545,7 @@ class MainActivity : AppCompatActivity() {
             intent.putExtra("VERIFY_MODE", true)
             intent.putExtra("TITLE", getString(R.string.verify_lock_disable_title))
             intent.putExtra("SUBTITLE", getString(R.string.verify_lock_disable_subtitle))
-            startActivityForResult(intent, VERIFY_PIN_REQ_CODE)
+            startInternalActivityForResult(intent, VERIFY_PIN_REQ_CODE)
         }
     }
     
