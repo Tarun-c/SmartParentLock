@@ -170,7 +170,7 @@ enum class MathOp { ADD, SUB, MUL, DIV }
 enum class SupportedLanguage { SPANISH, FRENCH, GERMAN, HINDI }
 
 enum class ChallengeType {
-    MATH, LOGIC, VOCABULARY, PATTERNS, GK, TRANSLATION
+    MATH, LOGIC, VOCABULARY, PATTERNS, GK, TRANSLATION, TRICKY
 }
 
 enum class Difficulty {

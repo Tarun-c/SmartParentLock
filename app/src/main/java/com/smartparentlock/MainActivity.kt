@@ -247,6 +247,7 @@ class MainActivity : AppCompatActivity() {
         if (enabledTypes.contains(ChallengeType.PATTERNS)) binding.chipGroupInfo.check(R.id.chipPatterns)
         if (enabledTypes.contains(ChallengeType.GK)) binding.chipGroupInfo.check(R.id.chipGK)
         if (enabledTypes.contains(ChallengeType.TRANSLATION)) binding.chipGroupInfo.check(R.id.chipTranslation)
+        if (enabledTypes.contains(ChallengeType.TRICKY)) binding.chipGroupInfo.check(R.id.chipTricky)
         
         // Initial visibility based on Repo state (reliable)
         binding.layoutMathSkills.visibility = if (enabledTypes.contains(ChallengeType.MATH)) View.VISIBLE else View.GONE
@@ -262,6 +263,7 @@ class MainActivity : AppCompatActivity() {
                      R.id.chipPatterns -> newSet.add(ChallengeType.PATTERNS)
                      R.id.chipGK -> newSet.add(ChallengeType.GK)
                      R.id.chipTranslation -> newSet.add(ChallengeType.TRANSLATION)
+                     R.id.chipTricky -> newSet.add(ChallengeType.TRICKY)
                  }
              }
              
@@ -311,7 +313,7 @@ class MainActivity : AppCompatActivity() {
         binding.tvAgeValue.text = "$currentAge yrs"
         
         fun updateAge(newAge: Int) {
-            val clampedAge = newAge.coerceIn(3, 16)
+            val clampedAge = newAge.coerceIn(3, 10)
             currentAge = clampedAge
             binding.tvAgeValue.text = "$clampedAge yrs"
             settingsRepository.setChildAge(clampedAge)
@@ -329,14 +331,14 @@ class MainActivity : AppCompatActivity() {
             // Show dialog for direct input
             val editText = android.widget.EditText(this).apply {
                 inputType = android.text.InputType.TYPE_CLASS_NUMBER
-                hint = "3-16"
+                hint = "3-10"
                 setText(currentAge.toString())
                 gravity = android.view.Gravity.CENTER
                 textSize = 20f
             }
             AlertDialog.Builder(this)
                 .setTitle("Enter Child Age")
-                .setMessage("Enter age between 3 and 16 years")
+                .setMessage("Enter age between 3 and 10 years")
                 .setView(editText)
                 .setPositiveButton("OK") { _, _ ->
                     val input = editText.text.toString().toIntOrNull()
