@@ -190,6 +190,10 @@ class MainActivity : AppCompatActivity() {
         }
         
         checkPermissions()
+        
+        if (::binding.isInitialized && ::devicePolicyManager.isInitialized) {
+            binding.switchAdmin.isChecked = devicePolicyManager.isAdminActive(deviceAdmin)
+        }
     }
     
     private fun redirectToPinScreen() {
@@ -480,6 +484,9 @@ class MainActivity : AppCompatActivity() {
                 Toast.makeText(this, getString(R.string.verification_canceled), Toast.LENGTH_SHORT).show()
                 binding.switchAdmin.isChecked = true // Reset
             }
+        } else if (requestCode == ADMIN_REQ_CODE) {
+             // Handle the case where the user backs out of the activation screen
+             binding.switchAdmin.isChecked = devicePolicyManager.isAdminActive(deviceAdmin)
         }
     }
 
