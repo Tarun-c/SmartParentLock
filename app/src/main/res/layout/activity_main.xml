@@ -591,6 +591,6 @@
         android:layout_gravity="bottom"
         android:background="#FFFFFF"
         ads:adSize="BANNER"
-        ads:adUnitId="ca-app-pub-3940256099942544/6300978111" />
+        ads:adUnitId="ca-app-pub-2057181527103590/2176691179" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

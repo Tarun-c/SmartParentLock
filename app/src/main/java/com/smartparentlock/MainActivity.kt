@@ -118,12 +118,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         Log.d(TAG, "onCreate: MainActivity launched")
         
-        // Configure test device for AdMob
-        val testDeviceIds = listOf("B2722BBF91394E22EC04CF0C2FEF7D16")
-        val configuration = RequestConfiguration.Builder()
-            .setTestDeviceIds(testDeviceIds)
-            .build()
-        MobileAds.setRequestConfiguration(configuration)
+        // (Production mode: Test devices configuration removed)
         MobileAds.initialize(this) {}
         
         // Check if coming from PinActivity with fresh auth
@@ -606,7 +601,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun loadInterstitial() {
         val adRequest = AdRequest.Builder().build()
-        InterstitialAd.load(this, "ca-app-pub-3940256099942544/1033173712", adRequest, object : InterstitialAdLoadCallback() {
+        InterstitialAd.load(this, "ca-app-pub-2057181527103590/2335997910", adRequest, object : InterstitialAdLoadCallback() {
             override fun onAdFailedToLoad(adError: LoadAdError) {
                 mInterstitialAd = null
             }

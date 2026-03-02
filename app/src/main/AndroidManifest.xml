@@ -24,7 +24,11 @@
         <!-- Google AdMob App ID (Test ID: Replace with Real ID for production) -->
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
-            android:value="ca-app-pub-2057181527103590~2493659091"/>
+            android:value="ca-app-pub-2057181527103590~1518215624"/>
+            
+        <property android:name="android.adservices.AD_SERVICES_CONFIG"
+            android:resource="@xml/gma_ad_services_config"
+            tools:replace="android:name,android:resource" />
 
         
         <activity
