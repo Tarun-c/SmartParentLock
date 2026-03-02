@@ -25,6 +25,11 @@ import com.google.android.gms.ads.interstitial.InterstitialAd
 import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
 import com.google.android.gms.ads.LoadAdError
 import com.google.android.gms.ads.FullScreenContentCallback
+import com.google.android.play.core.appupdate.AppUpdateManager
+import com.google.android.play.core.appupdate.AppUpdateManagerFactory
+import com.google.android.play.core.install.model.AppUpdateType
+import com.google.android.play.core.install.model.UpdateAvailability
+import android.util.Log
 
 /**
  * MainActivity - Parent Dashboard
@@ -81,6 +86,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var deviceAdmin: ComponentName
     private lateinit var devicePolicyManager: DevicePolicyManager
     private var mInterstitialAd: InterstitialAd? = null
+    private lateinit var appUpdateManager: AppUpdateManager
     
     companion object {
         const val PERM_REQ_CODE = 123
@@ -88,6 +94,8 @@ class MainActivity : AppCompatActivity() {
 
         const val VERIFY_PIN_REQ_CODE = 789
         const val VERIFY_ADMIN_REQ_CODE = 1010
+        const val APP_UPDATE_REQ_CODE = 2024
+        private const val TAG = "MainActivityLogs"
         private const val SESSION_TIMEOUT_MS = 5 * 60 * 1000L // 5 minutes
         
         // Static session management
@@ -108,6 +116,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        Log.d(TAG, "onCreate: MainActivity launched")
         
         // Configure test device for AdMob
         val testDeviceIds = listOf("B2722BBF91394E22EC04CF0C2FEF7D16")
@@ -171,6 +180,9 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         })
+        
+        appUpdateManager = AppUpdateManagerFactory.create(this)
+        checkForAppUpdate()
     }
 
     override fun onPause() {
@@ -202,6 +214,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
+        Log.d(TAG, "onResume: MainActivity resumed")
         
         // Re-check session on every resume (in case user came back after timeout)
         if (!isSessionValid()) {
@@ -213,6 +226,19 @@ class MainActivity : AppCompatActivity() {
         
         if (::binding.isInitialized && ::devicePolicyManager.isInitialized) {
             binding.switchAdmin.isChecked = devicePolicyManager.isAdminActive(deviceAdmin)
+        }
+        
+        if (::appUpdateManager.isInitialized) {
+            appUpdateManager.appUpdateInfo.addOnSuccessListener { appUpdateInfo ->
+                if (appUpdateInfo.updateAvailability() == UpdateAvailability.DEVELOPER_TRIGGERED_UPDATE_IN_PROGRESS) {
+                    appUpdateManager.startUpdateFlowForResult(
+                        appUpdateInfo,
+                        AppUpdateType.IMMEDIATE,
+                        this,
+                        APP_UPDATE_REQ_CODE
+                    )
+                }
+            }
         }
     }
     
@@ -270,7 +296,7 @@ class MainActivity : AppCompatActivity() {
         if (enabledTypes.contains(ChallengeType.TRICKY)) binding.chipGroupInfo.check(R.id.chipTricky)
         
         // Initial visibility based on Repo state (reliable)
-        binding.layoutMathSkills.visibility = if (enabledTypes.contains(ChallengeType.MATH)) View.VISIBLE else View.GONE
+        binding.layoutMathSkills.visibility = if (enabledTypes.contains(ChallengeType.MATH) || enabledTypes.isEmpty()) View.VISIBLE else View.GONE
         binding.layoutLanguages.visibility = if (enabledTypes.contains(ChallengeType.TRANSLATION)) View.VISIBLE else View.GONE
 
         // Listener
@@ -509,6 +535,10 @@ class MainActivity : AppCompatActivity() {
         } else if (requestCode == ADMIN_REQ_CODE) {
              // Handle the case where the user backs out of the activation screen
              binding.switchAdmin.isChecked = devicePolicyManager.isAdminActive(deviceAdmin)
+        } else if (requestCode == APP_UPDATE_REQ_CODE) {
+             if (resultCode != RESULT_OK) {
+                 Toast.makeText(this, "App update failed or cancelled.", Toast.LENGTH_SHORT).show()
+             }
         }
     }
 
@@ -528,6 +558,7 @@ class MainActivity : AppCompatActivity() {
     }
     
     private fun performLockToggle() {
+        Log.d(TAG, "performLockToggle: called. isChecked=${binding.switchLock.isChecked}")
         val isChecked = binding.switchLock.isChecked
         if (isChecked) {
             // Check if user has accepted service disclosure (first time only)
@@ -567,6 +598,7 @@ class MainActivity : AppCompatActivity() {
     }
     
     private fun enableLockProtection() {
+        Log.d(TAG, "enableLockProtection: Lock activated")
         settingsRepository.setLockEnabled(true)
         startLockService(startHidden = true) 
         Toast.makeText(this, getString(R.string.lock_enabled_toast), Toast.LENGTH_SHORT).show()
@@ -582,5 +614,21 @@ class MainActivity : AppCompatActivity() {
                 mInterstitialAd = interstitialAd
             }
         })
+    }
+
+    private fun checkForAppUpdate() {
+        val appUpdateInfoTask = appUpdateManager.appUpdateInfo
+        appUpdateInfoTask.addOnSuccessListener { appUpdateInfo ->
+            if (appUpdateInfo.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE
+                && appUpdateInfo.isUpdateTypeAllowed(AppUpdateType.IMMEDIATE)
+            ) {
+                appUpdateManager.startUpdateFlowForResult(
+                    appUpdateInfo,
+                    AppUpdateType.IMMEDIATE,
+                    this,
+                    APP_UPDATE_REQ_CODE
+                )
+            }
+        }
     }
 }

@@ -1,6 +1,7 @@
 package com.smartparentlock
 
 import kotlin.random.Random
+import android.util.Log
 
 data class Challenge(
     val question: String,
@@ -10,7 +11,10 @@ data class Challenge(
 
 class ChallengeManager(private val settingsRepository: SettingsRepository) {
 
+    private val TAG = "ChallengeManagerLogs"
+
     fun generateChallenge(type: ChallengeType, age: Int): Challenge {
+        Log.d(TAG, "generateChallenge: type=\$type, age=\$age")
         return when (type) {
             ChallengeType.MATH -> generateMathChallenge(age)
             ChallengeType.LOGIC -> generateLogicChallenge(age)

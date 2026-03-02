@@ -4,6 +4,8 @@ import android.content.Context
 import android.content.SharedPreferences
 import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKeys
+import android.util.Log
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 
 class SettingsRepository(context: Context) {
 
@@ -11,55 +13,75 @@ class SettingsRepository(context: Context) {
 
     init {
         val masterKeyAlias = MasterKeys.getOrCreate(MasterKeys.AES256_GCM_SPEC)
+        val prefFileName = "secret_shared_prefs"
 
-        sharedPreferences = EncryptedSharedPreferences.create(
-            "secret_shared_prefs",
-            masterKeyAlias,
-            context,
-            EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
-            EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
-        )
+        sharedPreferences = try {
+            EncryptedSharedPreferences.create(
+                prefFileName,
+                masterKeyAlias,
+                context,
+                EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
+                EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
+            )
+        } catch (e: Exception) {
+            Log.e(TAG, "Failed to load EncryptedSharedPreferences. Resetting.", e)
+            FirebaseCrashlytics.getInstance().recordException(e)
+            // If the Tink keyset is corrupted, delete the preferences and try again
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+                context.deleteSharedPreferences(prefFileName)
+            } else {
+                context.getSharedPreferences(prefFileName, Context.MODE_PRIVATE).edit().clear().commit()
+            }
+            EncryptedSharedPreferences.create(
+                prefFileName,
+                masterKeyAlias,
+                context,
+                EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
+                EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
+            )
+        }
     }
 
     fun isLockEnabled(): Boolean {
-        return sharedPreferences.getBoolean(KEY_LOCK_ENABLED, false)
+        return try { sharedPreferences.getBoolean(KEY_LOCK_ENABLED, false) } catch (e: Exception) { false }
     }
 
     fun setLockEnabled(enabled: Boolean) {
-        sharedPreferences.edit().putBoolean(KEY_LOCK_ENABLED, enabled).apply()
+        try { sharedPreferences.edit().putBoolean(KEY_LOCK_ENABLED, enabled).apply() } catch (e: Exception) {}
     }
 
     fun getPin(): String? {
-        return sharedPreferences.getString(KEY_PIN, null)
+        return try { sharedPreferences.getString(KEY_PIN, null) } catch (e: Exception) { null }
     }
 
     fun setPin(pin: String) {
-        sharedPreferences.edit().putString(KEY_PIN, pin).apply()
+        try { sharedPreferences.edit().putString(KEY_PIN, pin).apply() } catch (e: Exception) {}
     }
     
     fun clearPin() {
-        sharedPreferences.edit().remove(KEY_PIN).apply()
+        try { sharedPreferences.edit().remove(KEY_PIN).apply() } catch (e: Exception) {}
     }
     
     fun getSecurityQuestion(): String? {
-        return sharedPreferences.getString(KEY_SECURITY_QUESTION, null)
+        return try { sharedPreferences.getString(KEY_SECURITY_QUESTION, null) } catch (e: Exception) { null }
     }
     
     fun getSecurityAnswer(): String? {
-        return sharedPreferences.getString(KEY_SECURITY_ANSWER, null)
+        return try { sharedPreferences.getString(KEY_SECURITY_ANSWER, null) } catch (e: Exception) { null }
     }
     
     fun setSecurityQuestionAnswer(question: String, answer: String) {
-        sharedPreferences.edit()
-            .putString(KEY_SECURITY_QUESTION, question)
-            .putString(KEY_SECURITY_ANSWER, answer.lowercase().trim())
-            .apply()
+        try {
+            sharedPreferences.edit()
+                .putString(KEY_SECURITY_QUESTION, question)
+                .putString(KEY_SECURITY_ANSWER, answer.lowercase().trim())
+                .apply()
+        } catch (e: Exception) {}
     }
 
     fun getEnabledChallengeTypes(): Set<ChallengeType> {
-        val typesSet = sharedPreferences.getStringSet(KEY_CHALLENGE_TYPES_SET, null)
+        val typesSet = try { sharedPreferences.getStringSet(KEY_CHALLENGE_TYPES_SET, null) } catch (e: Exception) { null }
         if (typesSet.isNullOrEmpty()) {
-            // Fallback to legacy single type or default Math
             return setOf(getChallengeType())
         }
         return typesSet.mapNotNull {
@@ -68,13 +90,14 @@ class SettingsRepository(context: Context) {
     }
 
     fun setEnabledChallengeTypes(types: Set<ChallengeType>) {
-        val strSet = types.map { it.name }.toSet()
-        sharedPreferences.edit().putStringSet(KEY_CHALLENGE_TYPES_SET, strSet).apply()
+        try {
+            val strSet = types.map { it.name }.toSet()
+            sharedPreferences.edit().putStringSet(KEY_CHALLENGE_TYPES_SET, strSet).apply()
+        } catch (e: Exception) {}
     }
 
-    // Deprecate single getters/setters but keep for migration/fallback
     private fun getChallengeType(): ChallengeType {
-        val typeStr = sharedPreferences.getString(KEY_CHALLENGE_TYPE, ChallengeType.MATH.name)
+        val typeStr = try { sharedPreferences.getString(KEY_CHALLENGE_TYPE, ChallengeType.MATH.name) } catch (e: Exception) { ChallengeType.MATH.name }
         return try {
             ChallengeType.valueOf(typeStr!!)
         } catch (e: Exception) {
@@ -83,11 +106,11 @@ class SettingsRepository(context: Context) {
     }
 
     fun setChallengeType(type: ChallengeType) {
-        sharedPreferences.edit().putString(KEY_CHALLENGE_TYPE, type.name).apply()
+        try { sharedPreferences.edit().putString(KEY_CHALLENGE_TYPE, type.name).apply() } catch (e: Exception) {}
     }
 
     fun getDifficulty(): Difficulty {
-        val diffStr = sharedPreferences.getString(KEY_DIFFICULTY, Difficulty.EASY.name)
+        val diffStr = try { sharedPreferences.getString(KEY_DIFFICULTY, Difficulty.EASY.name) } catch (e: Exception) { Difficulty.EASY.name }
         return try {
             Difficulty.valueOf(diffStr!!)
         } catch (e: Exception) {
@@ -96,46 +119,45 @@ class SettingsRepository(context: Context) {
     }
 
     fun setDifficulty(difficulty: Difficulty) {
-        sharedPreferences.edit().putString(KEY_DIFFICULTY, difficulty.name).apply()
+        try { sharedPreferences.edit().putString(KEY_DIFFICULTY, difficulty.name).apply() } catch (e: Exception) {}
     }
 
     fun getSessionDurationMinutes(): Int {
-        return sharedPreferences.getInt(KEY_SESSION_DURATION, 15)
+        return try { sharedPreferences.getInt(KEY_SESSION_DURATION, 15) } catch (e: Exception) { 15 }
     }
 
     fun setSessionDurationMinutes(minutes: Int) {
-        sharedPreferences.edit().putInt(KEY_SESSION_DURATION, minutes).apply()
+        try { sharedPreferences.edit().putInt(KEY_SESSION_DURATION, minutes).apply() } catch (e: Exception) {}
     }
 
     fun getChildAge(): Int {
-        return sharedPreferences.getInt(KEY_CHILD_AGE, 7) // Default 7 years old
+        return try { sharedPreferences.getInt(KEY_CHILD_AGE, 7) } catch (e: Exception) { 7 }
     }
     
     fun setChildAge(age: Int) {
-        sharedPreferences.edit().putInt(KEY_CHILD_AGE, age).apply()
+        try { sharedPreferences.edit().putInt(KEY_CHILD_AGE, age).apply() } catch (e: Exception) {}
     }
 
     fun getMathSkill(op: MathOp): Boolean {
-        // Default: Add/Sub True. Mul/Div False.
         val default = (op == MathOp.ADD || op == MathOp.SUB)
-        return sharedPreferences.getBoolean("math_skill_${op.name}", default)
+        return try { sharedPreferences.getBoolean("math_skill_${op.name}", default) } catch (e: Exception) { default }
     }
 
     fun setMathSkill(op: MathOp, enabled: Boolean) {
-        sharedPreferences.edit().putBoolean("math_skill_${op.name}", enabled).apply()
+        try { sharedPreferences.edit().putBoolean("math_skill_${op.name}", enabled).apply() } catch (e: Exception) {}
     }
 
     fun getLanguageEnabled(lang: SupportedLanguage): Boolean {
-        // Default: Hindi True, others False
         val default = (lang == SupportedLanguage.HINDI)
-        return sharedPreferences.getBoolean("lang_enabled_${lang.name}", default)
+        return try { sharedPreferences.getBoolean("lang_enabled_${lang.name}", default) } catch (e: Exception) { default }
     }
 
     fun setLanguageEnabled(lang: SupportedLanguage, enabled: Boolean) {
-        sharedPreferences.edit().putBoolean("lang_enabled_${lang.name}", enabled).apply()
+        try { sharedPreferences.edit().putBoolean("lang_enabled_${lang.name}", enabled).apply() } catch (e: Exception) {}
     }
 
     companion object {
+        private const val TAG = "SettingsRepoLogs"
         private const val KEY_LOCK_ENABLED = "lock_enabled"
         private const val KEY_PIN = "parent_pin"
         private const val KEY_SECURITY_QUESTION = "security_question"
@@ -150,20 +172,19 @@ class SettingsRepository(context: Context) {
     }
     
     fun hasAcceptedServiceDisclosure(): Boolean {
-        return sharedPreferences.getBoolean(KEY_SERVICE_DISCLOSURE_ACCEPTED, false)
+        return try { sharedPreferences.getBoolean(KEY_SERVICE_DISCLOSURE_ACCEPTED, false) } catch (e: Exception) { false }
     }
     
     fun setServiceDisclosureAccepted(accepted: Boolean) {
-        sharedPreferences.edit().putBoolean(KEY_SERVICE_DISCLOSURE_ACCEPTED, accepted).apply()
+        try { sharedPreferences.edit().putBoolean(KEY_SERVICE_DISCLOSURE_ACCEPTED, accepted).apply() } catch (e: Exception) {}
     }
 
     fun isLearningEnabled(): Boolean {
-        // Default True (Challenges ON)
-        return sharedPreferences.getBoolean(KEY_LEARNING_ENABLED, true)
+        return try { sharedPreferences.getBoolean(KEY_LEARNING_ENABLED, true) } catch (e: Exception) { true }
     }
 
     fun setLearningEnabled(enabled: Boolean) {
-        sharedPreferences.edit().putBoolean(KEY_LEARNING_ENABLED, enabled).apply()
+        try { sharedPreferences.edit().putBoolean(KEY_LEARNING_ENABLED, enabled).apply() } catch (e: Exception) {}
     }
 }
 enum class MathOp { ADD, SUB, MUL, DIV }

@@ -23,6 +23,7 @@ import android.os.Looper
 import androidx.core.app.NotificationCompat
 import android.animation.ObjectAnimator
 import android.view.HapticFeedbackConstants
+import android.util.Log
 
 class LockService : Service() {
 
@@ -43,14 +44,17 @@ class LockService : Service() {
     
     private val screenReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
+            Log.d(TAG, "screenReceiver onReceive: action=${intent?.action}")
             when (intent?.action) {
                 Intent.ACTION_SCREEN_OFF -> {
+                    Log.d(TAG, "Screen went OFF. Cancelling timer.")
                     // Screen turned off - next unlock should show the overlay
                     screenWentOff = true
                     // Cancel the timer since screen is off
                     handler.removeCallbacks(lockRunnable)
                 }
                 Intent.ACTION_SCREEN_ON -> {
+                    Log.d(TAG, "Screen went ON.")
                     // Screen turned on - check if we need to show overlay
                     // For devices without a secure lock screen
                     val keyguardManager = getSystemService(Context.KEYGUARD_SERVICE) as android.app.KeyguardManager
@@ -63,6 +67,7 @@ class LockService : Service() {
                     // If device has lock screen, wait for ACTION_USER_PRESENT
                 }
                 Intent.ACTION_USER_PRESENT -> {
+                    Log.d(TAG, "User present (Device unlocked).")
                     // User unlocked their device (pattern/PIN/fingerprint)
                     // ALWAYS show overlay after unlocking (if screen was off)
                     // OR if timer expired during active use
@@ -76,11 +81,16 @@ class LockService : Service() {
 
     override fun onCreate() {
         super.onCreate()
+        Log.d(TAG, "onCreate: LockService created")
         windowManager = getSystemService(WINDOW_SERVICE) as WindowManager
         settingsRepository = SettingsRepository(this)
         challengeManager = ChallengeManager(settingsRepository)
         
-        startForeground(NOTIFICATION_ID, createNotification())
+        if (Build.VERSION.SDK_INT >= 34) {
+            startForeground(NOTIFICATION_ID, createNotification(), android.content.pm.ServiceInfo.FOREGROUND_SERVICE_TYPE_SPECIAL_USE)
+        } else {
+            startForeground(NOTIFICATION_ID, createNotification())
+        }
         
         // Listen for screen state changes and user unlock
         val filter = IntentFilter().apply {
@@ -92,6 +102,7 @@ class LockService : Service() {
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        Log.d(TAG, "onStartCommand: intent action=${intent?.action}")
         if (intent?.action == "UPDATE_TIMER") {
             if (overlayView == null) {
                  // Only update if currently unlocked (session active)
@@ -132,6 +143,7 @@ class LockService : Service() {
     }
 
     private fun showOverlay(isPinMode: Boolean) {
+        Log.d(TAG, "showOverlay: called with isPinMode=$isPinMode")
         if (overlayView != null) {
             if (isPinMode) {
                  setupPinChallenge(overlayView!!)
@@ -173,6 +185,7 @@ class LockService : Service() {
     }
 
     private fun removeOverlay() {
+        Log.d(TAG, "removeOverlay: called")
         if (overlayView != null) {
             try {
                 windowManager.removeView(overlayView)
@@ -184,6 +197,7 @@ class LockService : Service() {
     }
 
     private fun setupChallenge(view: View) {
+        Log.d(TAG, "setupChallenge: presenting learning challenge")
         val tvTitle = view.findViewById<TextView>(R.id.tvTitle)
         val tvQuestion = view.findViewById<TextView>(R.id.tvQuestion)
         val optionsContainer = view.findViewById<View>(R.id.optionsContainer)
@@ -263,6 +277,7 @@ class LockService : Service() {
     }
     
     private fun handleCorrectAnswer(selectedButton: Button) {
+        Log.d(TAG, "handleCorrectAnswer: Child answered correctly")
         // Green state
         selectedButton.setBackgroundResource(R.drawable.bg_option_button_correct)
         
@@ -282,6 +297,7 @@ class LockService : Service() {
     }
 
     private fun handleWrongAnswer(view: View, selectedButton: Button, allButtons: List<Button>) {
+         Log.d(TAG, "handleWrongAnswer: Child answered incorrectly")
          // Red state
          selectedButton.setBackgroundResource(R.drawable.bg_option_button_error)
          
@@ -399,7 +415,9 @@ class LockService : Service() {
     }
     
     private fun startSessionTimer() {
+        Log.d(TAG, "startSessionTimer: Starting timer...")
         val minutes = settingsRepository.getSessionDurationMinutes()
+        Log.d(TAG, "startSessionTimer: Duration set to \$minutes minutes")
         handler.removeCallbacks(lockRunnable)
         val delay = minutes * 60 * 1000L
         sessionExpiryTime = System.currentTimeMillis() + delay
@@ -412,6 +430,7 @@ class LockService : Service() {
     }
 
     companion object {
+        private const val TAG = "LockServiceLogs"
         const val NOTIFICATION_ID = 1001
     }
 }

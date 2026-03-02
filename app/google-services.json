@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "23611127087",
+    "project_id": "smart-child-lock",
+    "storage_bucket": "smart-child-lock.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:23611127087:android:4e7d274e83b66a6e359dda",
+        "android_client_info": {
+          "package_name": "com.smartparentlock"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB3Pr8IbwqWF1QEL2g9Eot1ePhQhslNitE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
