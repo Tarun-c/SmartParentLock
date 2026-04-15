@@ -11,6 +11,7 @@ import android.content.Context
 import android.widget.RadioButton
 import android.widget.Toast
 import android.view.View
+import android.view.LayoutInflater
 import android.widget.CompoundButton
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.button.MaterialButtonToggleGroup
@@ -491,16 +492,51 @@ class MainActivity : AppCompatActivity() {
         startInternalActivity(Intent(this, FeedbackActivity::class.java))
     }
 
+    private var overlayPermissionDialog: AlertDialog? = null
+
     private fun checkPermissions(): Boolean {
         if (!Settings.canDrawOverlays(this)) {
+            showOverlayPermissionDialog()
+            return false
+        }
+        // Dismiss dialog if permission was granted (user returned from settings)
+        overlayPermissionDialog?.dismiss()
+        overlayPermissionDialog = null
+        return true
+    }
+
+    private fun showOverlayPermissionDialog() {
+        // Don't show duplicate dialogs
+        if (overlayPermissionDialog?.isShowing == true) return
+
+        val dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_overlay_permission, null)
+
+        val dialog = AlertDialog.Builder(this)
+            .setView(dialogView)
+            .setCancelable(false)
+            .create()
+
+        dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
+
+        val btnOpenSettings = dialogView.findViewById<com.google.android.material.button.MaterialButton>(R.id.btnOpenOverlaySettings)
+        val tvNotNow = dialogView.findViewById<android.widget.TextView>(R.id.tvOverlayNotNow)
+
+        btnOpenSettings.setOnClickListener {
             val intent = Intent(
                 Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
                 Uri.parse("package:$packageName")
             )
             startInternalActivityForResult(intent, PERM_REQ_CODE)
-            return false
         }
-        return true
+
+        tvNotNow.setOnClickListener {
+            dialog.dismiss()
+            overlayPermissionDialog = null
+            Toast.makeText(this, getString(R.string.overlay_permission_toast), Toast.LENGTH_LONG).show()
+        }
+
+        overlayPermissionDialog = dialog
+        dialog.show()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -594,6 +630,12 @@ class MainActivity : AppCompatActivity() {
     
     private fun enableLockProtection() {
         Log.d(TAG, "enableLockProtection: Lock activated")
+        // Check overlay permission before enabling
+        if (!Settings.canDrawOverlays(this)) {
+            binding.switchLock.isChecked = false
+            showOverlayPermissionDialog()
+            return
+        }
         settingsRepository.setLockEnabled(true)
         startLockService(startHidden = true) 
         Toast.makeText(this, getString(R.string.lock_enabled_toast), Toast.LENGTH_SHORT).show()

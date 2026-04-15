@@ -22,7 +22,7 @@ class WelcomeActivity : AppCompatActivity() {
     
     private val pages = listOf(
         OnboardingPage(
-            "Smart Parent Lock",
+            "Smart Child Lock",
             "Transform screen time into learning time! \n\nThis app replaces the standard lock screen with educational challenges, turning every unlock into a brain-building moment.",
             R.drawable.ic_onboarding_fun
         ),

@@ -1,4 +1,4 @@
-# Smart Parent Lock
+# Smart Child Lock
 
 An Android application designed to help parents encourage healthy smartphone habits and learning in children through educational challenges.
 
@@ -7,7 +7,7 @@ An Android application designed to help parents encourage healthy smartphone hab
 ### Core Features
 - **Parent Authentication**: Secure PIN-based access control
 - **Educational Lock Screen**: Interactive challenges (Math, Vocabulary, Patterns, GK, Translation)
-- **Adaptive Difficulty**: Age-based question complexity (5-18 years)
+- **Adaptive Difficulty**: Age-based question complexity (3-10 years)
 - **Session Management**: Configurable unlock duration (1-60 minutes)
 - **Device Admin Protection**: Optional uninstall prevention
 - **Emergency Access**: Parent PIN override on lock screen
@@ -28,7 +28,7 @@ An Android application designed to help parents encourage healthy smartphone hab
 ├─────────────────────────────────────────────────────────────┤
 │  PinActivity  │  WelcomeActivity  │  MainActivity  │  Feedback│
 │  (Auth)       │  (Onboarding)     │  (Dashboard)   │  Activity│
-└────────┬──────────────────┬───────────────┬────────────┬─────┘
+└────────┬──────────────┬───────────────┬────────────┬─────┘
          │                  │               │            │
          └──────────────────┴───────────────┴────────────┘
                             │
@@ -154,7 +154,7 @@ app/src/main/
   - Lock enabled state
   - Learning mode enabled
   - Challenge types (Set<ChallengeType>)
-  - Child age (5-18)
+  - Child age (3-10)
   - Session duration (1-60 minutes)
 - **Key Methods**:
   - `getPin()`, `setPin()`, `clearPin()`
@@ -211,8 +211,7 @@ app/src/main/
   2. **Interstitial** (Full-screen): 
      - Triggered on lock toggle
      - Triggered on app exit
-- **Test Mode**: Uses Google test IDs during development
-- **Production**: Replace with real AdMob IDs before release
+- **Production**: Real AdMob IDs configured
 
 ---
 
@@ -220,14 +219,14 @@ app/src/main/
 
 ### **Prerequisites**
 - Android Studio Arctic Fox or later
-- Minimum SDK: 24 (Android 7.0)
-- Target SDK: 34 (Android 14)
+- Minimum SDK: 26 (Android 8.0)
+- Target SDK: 35 (Android 15)
 
 ### **Setup**
 1. Clone the repository
 2. Open in Android Studio
 3. Sync Gradle dependencies
-4. Run on device/emulator (API 24+)
+4. Run on device/emulator (API 26+)
 
 ### **First Launch Flow**
 1. Create 4-digit Parent PIN
@@ -254,20 +253,14 @@ app/src/main/
 ## 🎯 Play Store Readiness
 
 ### **Completed**
-- ✅ Target SDK 34 (Android 14)
+- ✅ Target SDK 35 (Android 15)
 - ✅ Adaptive icon
-- ✅ Privacy Policy link (placeholder)
+- ✅ Privacy Policy hosted
 - ✅ Hardcoded strings extracted to `strings.xml`
 - ✅ Light mode enforced (Dark mode disabled)
-- ✅ AdMob integrated (Test IDs)
-
-### **Before Publishing**
-1. Replace AdMob Test IDs with real IDs
-2. Create and host Privacy Policy
-3. Update Privacy Policy URL in `MainActivity.kt`
-4. Prepare Play Store listing (screenshots, description)
-5. Fill out Data Safety section (declare permissions)
-6. Provide justifications for special permissions
+- ✅ AdMob integrated (Production IDs)
+- ✅ Firebase Analytics + Crashlytics
+- ✅ In-App Updates support
 
 ---
 
@@ -289,11 +282,11 @@ app/src/main/
 - **MVVM-lite**: Activities manage UI, delegate to repositories/managers
 
 ### **Testing Recommendations**
-1. Test on multiple Android versions (7.0 - 14.0)
+1. Test on multiple Android versions (8.0 - 15.0)
 2. Verify permission flows on fresh installs
 3. Test session timeout behavior
 4. Validate challenge difficulty scaling
-5. Test AdMob integration (use test device IDs)
+5. Test AdMob integration
 
 ---
 
@@ -309,5 +302,5 @@ For questions or support, use the in-app feedback feature.
 
 ---
 
-**Version**: 1.0  
-**Last Updated**: January 2026
+**Version**: 4.0  
+**Last Updated**: April 2026

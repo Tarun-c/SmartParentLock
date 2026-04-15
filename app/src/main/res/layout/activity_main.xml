@@ -21,7 +21,7 @@
             app:contentScrim="@color/purple_700"
             app:expandedTitleGravity="bottom|center_horizontal"
             app:expandedTitleMarginBottom="20dp"
-            app:title="Smart Parent Lock">
+            app:title="Smart Child Lock">
 
             <LinearLayout
                 android:layout_width="match_parent"

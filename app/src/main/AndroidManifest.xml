@@ -18,7 +18,7 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.SmartParentLock"
+        android:theme="@style/Theme.SmartChildLock"
         tools:targetApi="31">
         
         <!-- Google AdMob App ID (Test ID: Replace with Real ID for production) -->

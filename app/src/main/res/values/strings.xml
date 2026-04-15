@@ -1,7 +1,7 @@
 <resources>
-    <string name="app_name">Smart Parent Lock</string>
-    <string name="enable_lock">Enable Parent Lock</string>
-    <string name="disable_lock">Disable Parent Lock</string>
+    <string name="app_name">Smart Child Lock</string>
+    <string name="enable_lock">Enable Child Lock</string>
+    <string name="disable_lock">Disable Child Lock</string>
     <string name="set_pin">Change PIN</string>
     <string name="enter_pin">Enter PIN</string>
     <string name="settings">Settings</string>
@@ -13,6 +13,19 @@
     <string name="permission_required">Permission Required</string>
     <string name="overlay_permission_msg">This app requires overlay permission to function.</string>
     <string name="grant">Grant</string>
+
+    <!-- Overlay Permission Dialog -->
+    <string name="overlay_permission_title">One More Step!</string>
+    <string name="overlay_permission_subtitle">Smart Child Lock needs the \"Display over other apps\" permission to show educational challenges on the lock screen.</string>
+    <string name="overlay_why_needed_label">🔒 Why is this needed?</string>
+    <string name="overlay_why_needed_text">This permission allows the app to display learning questions when your child unlocks the device. Without it, the lock screen cannot appear and your child can use the phone freely.</string>
+    <string name="overlay_steps_label">📋 How to enable (3 easy steps):</string>
+    <string name="overlay_step1">Tap \"Open Settings\" below</string>
+    <string name="overlay_step2">Find \"Smart Child Lock\" and tap the toggle to ON</string>
+    <string name="overlay_step3">Press back to return to the app</string>
+    <string name="overlay_open_settings_btn">Open Settings</string>
+    <string name="overlay_not_now">I\'ll do this later</string>
+    <string name="overlay_permission_toast">⚠️ Permission required for lock screen to work</string>
     <string name="admin_label">Uninstall Protection</string>
     <string name="admin_description">Prevents the application from being uninstalled without parent approval.</string>
     <string name="prevent_uninstall">Prevent Uninstalling</string>
@@ -63,7 +76,7 @@
     
     <!-- Foreground Service Disclosure -->
     <string name="service_disclosure_title">Background Service Notice</string>
-    <string name="service_disclosure_message">Smart Parent Lock needs to run a background service to:\n\n• Monitor when your child unlocks the device\n• Display educational challenges before device access\n• Show a persistent notification while protection is active\n\nThis service runs continuously to ensure your child solves a learning challenge every time they use the device.\n\nDo you want to enable this protection?</string>
+    <string name="service_disclosure_message">Smart Child Lock needs to run a background service to:\n\n• Monitor when your child unlocks the device\n• Display educational challenges before device access\n• Show a persistent notification while protection is active\n\nThis service runs continuously to ensure your child solves a learning challenge every time they use the device.\n\nDo you want to enable this protection?</string>
     <string name="service_disclosure_accept">Enable Protection</string>
     <string name="service_disclosure_decline">Not Now</string>
 </resources>
